@@ -17,7 +17,7 @@ const Footer = () => {
           {/* Store Information */}
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-white">
-              Radhe Radhe Hardware
+              Maa Kali Hardware - Radhe Radhe
             </h3>
             <p className="text-gray-400">
               Your trusted hardware supplier in Bhaktapur since 1995. Quality
@@ -25,29 +25,26 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <a
-                href="#"
+                href="https://www.facebook.com/groups/1658842604386500"
+                target="_blank"
                 className="text-gray-400 hover:text-amber-500 transition-colors">
                 <Facebook className="h-6 w-6" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/nationalhomedecor637/"
+                target="_blank"
                 className="text-gray-400 hover:text-amber-500 transition-colors">
                 <Instagram className="h-6 w-6" />
               </a>
               <a
-                href="#"
-                className="text-gray-400 hover:text-amber-500 transition-colors">
-                <Twitter className="h-6 w-6" />
-              </a>
-              <a
-                href="#"
+                href="https://www.youtube.com/@MaaXNational"
+                target="_blank"
                 className="text-gray-400 hover:text-amber-500 transition-colors">
                 <Youtube className="h-6 w-6" />
               </a>
             </div>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h4 className="text-lg font-semibold text-white mb-4">
               Quick Links
@@ -62,28 +59,28 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/product"
                   className="text-gray-400 hover:text-amber-500 transition-colors">
                   Products
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
+                  href="#services"
                   className="text-gray-400 hover:text-amber-500 transition-colors">
                   Services
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
+                  href="#about"
                   className="text-gray-400 hover:text-amber-500 transition-colors">
                   About Us
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
+                  href="#contact"
                   className="text-gray-400 hover:text-amber-500 transition-colors">
                   Contact
                 </a>
@@ -91,7 +88,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Product Categories */}
           <div>
             <h4 className="text-lg font-semibold text-white mb-4">
               Our Products
@@ -125,7 +121,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div>
             <h4 className="text-lg font-semibold text-white mb-4">
               Contact Us
@@ -169,12 +164,11 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Divider */}
         <div className="border-t border-gray-800 dark:border-gray-700 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-500 text-sm">
-              © {new Date().getFullYear()} Radhe Radhe Hardware. All rights
-              reserved.
+              © {new Date().getFullYear()} Maa Kali Hardware - Radhe Radhe. All
+              rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a className="text-gray-500 hover:text-amber-500 text-sm">
@@ -189,11 +183,10 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* SEO Note (hidden on small screens) */}
           <p className="text-gray-600 text-xs mt-6 text-center hidden md:block">
-            Radhe Radhe Hardware - Best hardware shop in Kathmandu Valley |
-            Hardware store near me in Bhaktapur | Leading construction materials
-            supplier in Nepal | Buy plumbing tools in Kathmandu
+            Maa Kali Hardware - Hardware - Best hardware shop in Kathmandu
+            Valley | Hardware store near me in Bhaktapur | Leading construction
+            materials supplier in Nepal | Buy plumbing tools in Kathmandu
           </p>
         </div>
       </div>

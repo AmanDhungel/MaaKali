@@ -10,7 +10,7 @@ const HeroSection = () => {
               <span className="text-amber-600 dark:text-amber-400">
                 Maa Kali Hardware
               </span>
-              Hardware - Radhe Radhe
+              &nbsp; Radhe Radhe
             </h1>
 
             <h2 className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-6">
@@ -25,7 +25,7 @@ const HeroSection = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <a href="/product">
-                <button className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                <button className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer">
                   <ShoppingCart size={20} />
                   Shop Now
                 </button>
