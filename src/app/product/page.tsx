@@ -1,3 +1,4 @@
+import axios from "axios";
 import { ShoppingCart, Heart, Star, Eye } from "react-feather";
 
 const ProductCard = ({
@@ -97,8 +98,7 @@ const ProductCard = ({
   );
 };
 
-// Example Usage
-const ProductShowcase = () => {
+const ProductShowcase = async () => {
   const sampleProduct = [
     {
       id: 1,
@@ -159,6 +159,8 @@ const ProductShowcase = () => {
       isNew: true,
     },
   ];
+
+  // const { data } = await axios.get("http://localhost:3000/api/product");
 
   return (
     <section className="py-12 bg-gray-50 dark:bg-gray-900">

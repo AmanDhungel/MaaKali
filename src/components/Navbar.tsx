@@ -1,46 +1,51 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { Sun, Moon, Menu, X } from "react-feather"; // You can use any icon library
+import { useState, useEffect, useRef } from "react";
+import { Sun, Moon, Menu, X } from "react-feather";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
-
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-  };
+  const pathname = usePathname();
 
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Product", path: "/product" },
-    { name: "About", path: "#about" },
-    { name: "Services", path: "#services" },
-    { name: "Contact", path: "#contact" },
+    { name: "Blog", path: "/blog" },
+    {
+      name: "About",
+      path: pathname === "/" ? "#about" : "/#about",
+    },
+    { name: "Services", path: pathname === "/" ? "#services" : "/#services" },
+    { name: "Contact", path: pathname === "/" ? "#contact" : "/#contact" },
   ];
 
+  console.log("pathname", pathname);
+
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-md">
+    <nav className={`bg-white dark:bg-gray-900 shadow-md `}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
-              <Image
-                src="/dh.png"
-                alt="Logo"
-                width={70}
-                height={70}
-                className="h-12 w-12 mr-2 object-center overflow-hidden"
-              />
-            </span>
+            <div className="group w-[70px] h-[70px] perspective">
+              <div className="relative w-full h-full transition-transform duration-700 transform-style-preserve-3d group-hover:rotate-y-180">
+                <div className="absolute w-full h-full backface-hidden flex items-center justify-center">
+                  <Image
+                    src="/dh.png"
+                    alt="Logo"
+                    width={70}
+                    height={70}
+                    className="h-12 w-12 object-center"
+                  />
+                </div>
+
+                <div className="absolute w-full h-full backface-hidden rotate-y-180 flex items-center justify-center bg-white dark:bg-gray-800 rounded">
+                  <span className="text-sm font-bold text-gray-900 dark:text-white text-center">
+                    National Home Decor
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
