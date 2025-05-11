@@ -1,8 +1,9 @@
 "use client";
 import axios from "axios";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { Calendar, Clock, User, ArrowRight } from "react-feather";
+import { Calendar, Clock, User, ArrowRight, Loader } from "react-feather";
 
 interface Blog {
   id: number;
@@ -24,7 +25,9 @@ const BlogCard = ({ blogs }: { blogs: Blog[] }) => {
           className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
           key={blog.id}>
           <div className="relative h-48 w-full overflow-hidden">
-            <img
+            <Image
+              width={500}
+              height={300}
               src={blog.image}
               alt={blog.title}
               className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
@@ -76,72 +79,23 @@ const BlogCard = ({ blogs }: { blogs: Blog[] }) => {
 
 const BlogSection = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState<Boolean>(false);
 
   useEffect(() => {
     const fetchBlogs = async () => {
+      setLoading(true);
       try {
         const { data } = await axios.get("http://localhost:3000/api/blog");
         setBlogs(data);
+        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch blogs:", error);
       }
     };
-
     fetchBlogs();
   }, []);
 
-  // const sampleBlog = [
-  //   {
-  //     id: 1,
-  //     title: "Top 5 Plumbing Tools Every Homeowner Should Have",
-  //     excerpt:
-  //       "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
-  //     image: "/images/blog-plumbing-tools.jpg",
-  //     createdAt: "2024-05-15T00:00:00Z",
-  //     date: "May 15, 2024",
-  //     author: "Rajesh Sharma",
-  //     readTime: 5,
-  //     url: "/blog/top-plumbing-tools",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Top 5 Plumbing Tools Every Homeowner Should Have",
-  //     excerpt:
-  //       "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
-  //     image: "/images/blog-plumbing-tools.jpg",
-  //     category: "Plumbing",
-  //     date: "May 15, 2024",
-  //     author: "Rajesh Sharma",
-  //     readTime: 5,
-  //     url: "/blog/top-plumbing-tools",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Top 5 Plumbing Tools Every Homeowner Should Have",
-  //     excerpt:
-  //       "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
-  //     image: "/images/blog-plumbing-tools.jpg",
-  //     category: "Plumbing",
-  //     date: "May 15, 2024",
-  //     author: "Rajesh Sharma",
-  //     readTime: 5,
-  //     url: "/blog/top-plumbing-tools",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Top 5 Plumbing Tools Every Homeowner Should Have",
-  //     excerpt:
-  //       "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
-  //     image: "/images/blog-plumbing-tools.jpg",
-  //     category: "Plumbing",
-  //     date: "May 15, 2024",
-  //     author: "Rajesh Sharma",
-  // <BlogCard blogs={blogs} />
-  //     url: "/blog/top-plumbing-tools",
-  //   },
-  // ];
-
-  // console.log("data", data);
+  console.log("blogs", blogs);
 
   return (
     <section className="py-12 bg-gray-50 dark:bg-gray-900">
@@ -150,9 +104,13 @@ const BlogSection = () => {
           Latest{" "}
           <span className="text-amber-600 dark:text-amber-400">Blog Posts</span>
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <BlogCard blogs={blogs} />
-        </div>
+        {loading ? (
+          <Loader className="animate-spin flex m-auto w-12 h-12" />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <BlogCard blogs={blogs} />
+          </div>
+        )}
       </div>
     </section>
   );
