@@ -29,7 +29,7 @@ const NotFoundPage = () => {
 
       <div className="flex flex-wrap justify-center gap-4 mb-12">
         <button
-          onClick={() => (window.location.href = "/")}
+          onClick={() => router.push("/")}
           className="flex cursor-pointer items-center px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition-colors">
           <Home className="h-5 w-5 mr-2" />
           Go to Homepage

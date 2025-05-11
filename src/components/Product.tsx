@@ -12,7 +12,7 @@ const ProductCard = ({
     originalPrice: number;
     rating: number;
     inStock: boolean;
-    isNew: boolean;
+    isProductNew: boolean;
   };
 }) => {
   return (
@@ -24,7 +24,7 @@ const ProductCard = ({
           className="w-full h-48 md:h-56 object-cover"
         />
 
-        {product.isNew && (
+        {product.isProductNew && (
           <div className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-md">
             NEW
           </div>
@@ -101,7 +101,7 @@ const ProductShowcase = () => {
     image:
       "https://images.pexels.com/photos/2583028/pexels-photo-2583028.jpeg?auto=compress&cs=tinysrgb&w=600",
     inStock: true,
-    isNew: false,
+    isProductNew: false,
   };
 
   return (

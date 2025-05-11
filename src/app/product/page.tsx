@@ -14,7 +14,7 @@ const ProductCard = ({
     originalPrice?: number;
     rating: number;
     inStock: boolean;
-    isNew: boolean;
+    isProductNew: boolean;
   }[];
 }) => {
   return (
@@ -30,7 +30,7 @@ const ProductCard = ({
               className="w-full h-48 md:h-56 object-cover"
             />
 
-            {product.isNew && (
+            {product.isProductNew && (
               <div className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-md">
                 NEW
               </div>
@@ -110,7 +110,7 @@ const ProductShowcase = async () => {
       rating: 4.5,
       image: "https://example.com/tap-image.jpg",
       inStock: true,
-      isNew: true,
+      isProductNew: true,
     },
     {
       id: 2,
@@ -121,7 +121,7 @@ const ProductShowcase = async () => {
       rating: 4.5,
       image: "https://example.com/tap-image.jpg",
       inStock: true,
-      isNew: true,
+      isProductNew: true,
     },
     {
       id: 3,
@@ -132,7 +132,7 @@ const ProductShowcase = async () => {
       rating: 4.5,
       image: "https://example.com/tap-image.jpg",
       inStock: true,
-      isNew: true,
+      isProductNew: true,
     },
     {
       id: 4,
@@ -144,7 +144,7 @@ const ProductShowcase = async () => {
       rating: 4.5,
       image: "https://example.com/tap-image.jpg",
       inStock: true,
-      isNew: true,
+      isProductNew: true,
     },
     {
       id: 5,
@@ -156,7 +156,7 @@ const ProductShowcase = async () => {
       rating: 4.5,
       image: "https://example.com/tap-image.jpg",
       inStock: true,
-      isNew: true,
+      isProductNew: true,
     },
   ];
 

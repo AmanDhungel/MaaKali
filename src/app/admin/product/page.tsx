@@ -5,8 +5,22 @@ import { Plus, Trash2 } from "react-feather";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { CldUploadButton } from "next-cloudinary";
-import Editor from "@/utils/Editor";
-import RichTextEditor from "@/utils/RichTextEditor";
+
+interface ProductFormProps {
+  image: string;
+  name: string;
+  category: string;
+  brand: string;
+  price: number;
+  originalPrice?: number;
+  rating: number;
+  inStock: boolean;
+  isProductNew: boolean;
+  features: string[];
+  description: string;
+  specifications: string[];
+  relatedProducts: string[];
+}
 
 const ProductForm = () => {
   const {
@@ -40,7 +54,7 @@ const ProductForm = () => {
   const [readOnly, setReadOnly] = useState(false);
   const quillRef = useRef(null);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: ProductFormProps) => {
     // const cleanedData = {
     //   ...data,
     //   inStock: data.inStock === "true",
@@ -288,7 +302,6 @@ const ProductForm = () => {
         </div>
         <div className="flex flex-col space-y-4">
           <label className="text-sm font-medium">description</label>
-          <RichTextEditor />
           <textarea
             {...register("description", {
               required: "description is required",

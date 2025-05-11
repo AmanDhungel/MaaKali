@@ -9,6 +9,16 @@ import FroalaEditorComponent from "react-froala-wysiwyg";
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 
+interface BlogPostFormProps {
+  title: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  tags: string[];
+  image: string;
+  relatedPosts: string[];
+}
+
 const BlogPostForm = () => {
   const {
     register,
@@ -17,7 +27,6 @@ const BlogPostForm = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    control,
   } = useForm({
     defaultValues: {
       title: "",
@@ -33,7 +42,7 @@ const BlogPostForm = () => {
   const [tagInput, setTagInput] = useState("");
   const [relatedPostInput, setRelatedPostInput] = useState("");
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: BlogPostFormProps) => {
     try {
       const res = await axios.post("http://localhost:3000/api/blog", data);
       toast.success("Blog post submitted successfully!", {
@@ -58,7 +67,7 @@ const BlogPostForm = () => {
     }
   };
 
-  const removeTag = (index) => {
+  const removeTag = (index: number) => {
     const currentTags = getValues("tags");
     setValue(
       "tags",
@@ -77,7 +86,7 @@ const BlogPostForm = () => {
     }
   };
 
-  const removeRelatedPost = (index) => {
+  const removeRelatedPost = (index: number) => {
     const currentRelatedPosts = getValues("relatedPosts");
     setValue(
       "relatedPosts",
@@ -243,7 +252,7 @@ const BlogPostForm = () => {
               <div
                 key={index}
                 className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-1">
-                <span>{post}</span>
+                <span className="text-black">{post}</span>
                 <button
                   type="button"
                   onClick={() => removeRelatedPost(index)}

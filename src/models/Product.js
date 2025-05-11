@@ -10,7 +10,7 @@ const productSchema = new mongoose.Schema({
     originalPrice: { type: Number, required: false },
     rating: { type: Number, required: true },
     inStock: { type: Boolean, required: true },
-    isNew: { type: Boolean, required: true },
+    isProductNew: { type: Boolean, required: true },
     features: [{ type: String }],
     description: { type: String },
     specifications: [

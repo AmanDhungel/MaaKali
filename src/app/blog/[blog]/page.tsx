@@ -8,11 +8,8 @@ import {
   MessageSquare,
   Bookmark,
 } from "react-feather";
-import { useParams } from "next/navigation";
 
 const SingleBlogPage = () => {
-  // const { id } = useParams();
-
   const blog = {
     id: 1,
     title: "Top 5 Plumbing Tools Every Homeowner in Nepal Should Have",

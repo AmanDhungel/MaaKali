@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Eye, EyeOff, Lock, Mail, Facebook } from "react-feather";
-import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
@@ -101,7 +101,7 @@ const LoginForm = () => {
 
   const handleOAuth = (provider: OAuthProvider["provider"]): void => {
     console.log(`Logging in with ${provider}`);
-    window.location.href = `/api/auth/${provider.toLowerCase()}`;
+    router.push(`/api/auth/${provider.toLowerCase()}`);
   };
 
   return (

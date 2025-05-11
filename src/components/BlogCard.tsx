@@ -1,4 +1,7 @@
+"use client";
 import axios from "axios";
+import { useEffect, useState } from "react";
+
 import { Calendar, Clock, User, ArrowRight } from "react-feather";
 
 interface Blog {
@@ -71,61 +74,74 @@ const BlogCard = ({ blogs }: { blogs: Blog[] }) => {
   );
 };
 
-const BlogSection = async () => {
-  const { data } = await axios.get("http://localhost:3000/api/blog");
+const BlogSection = () => {
+  const [blogs, setBlogs] = useState<Blog[]>([]);
 
-  const sampleBlog = [
-    {
-      id: 1,
-      title: "Top 5 Plumbing Tools Every Homeowner Should Have",
-      excerpt:
-        "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
-      image: "/images/blog-plumbing-tools.jpg",
-      createdAt: "2024-05-15T00:00:00Z",
-      date: "May 15, 2024",
-      author: "Rajesh Sharma",
-      readTime: 5,
-      url: "/blog/top-plumbing-tools",
-    },
-    {
-      id: 2,
-      title: "Top 5 Plumbing Tools Every Homeowner Should Have",
-      excerpt:
-        "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
-      image: "/images/blog-plumbing-tools.jpg",
-      category: "Plumbing",
-      date: "May 15, 2024",
-      author: "Rajesh Sharma",
-      readTime: 5,
-      url: "/blog/top-plumbing-tools",
-    },
-    {
-      id: 3,
-      title: "Top 5 Plumbing Tools Every Homeowner Should Have",
-      excerpt:
-        "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
-      image: "/images/blog-plumbing-tools.jpg",
-      category: "Plumbing",
-      date: "May 15, 2024",
-      author: "Rajesh Sharma",
-      readTime: 5,
-      url: "/blog/top-plumbing-tools",
-    },
-    {
-      id: 4,
-      title: "Top 5 Plumbing Tools Every Homeowner Should Have",
-      excerpt:
-        "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
-      image: "/images/blog-plumbing-tools.jpg",
-      category: "Plumbing",
-      date: "May 15, 2024",
-      author: "Rajesh Sharma",
-      readTime: 5,
-      url: "/blog/top-plumbing-tools",
-    },
-  ];
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:3000/api/blog");
+        setBlogs(data);
+      } catch (error) {
+        console.error("Failed to fetch blogs:", error);
+      }
+    };
 
-  console.log("data", data);
+    fetchBlogs();
+  }, []);
+
+  // const sampleBlog = [
+  //   {
+  //     id: 1,
+  //     title: "Top 5 Plumbing Tools Every Homeowner Should Have",
+  //     excerpt:
+  //       "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
+  //     image: "/images/blog-plumbing-tools.jpg",
+  //     createdAt: "2024-05-15T00:00:00Z",
+  //     date: "May 15, 2024",
+  //     author: "Rajesh Sharma",
+  //     readTime: 5,
+  //     url: "/blog/top-plumbing-tools",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Top 5 Plumbing Tools Every Homeowner Should Have",
+  //     excerpt:
+  //       "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
+  //     image: "/images/blog-plumbing-tools.jpg",
+  //     category: "Plumbing",
+  //     date: "May 15, 2024",
+  //     author: "Rajesh Sharma",
+  //     readTime: 5,
+  //     url: "/blog/top-plumbing-tools",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Top 5 Plumbing Tools Every Homeowner Should Have",
+  //     excerpt:
+  //       "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
+  //     image: "/images/blog-plumbing-tools.jpg",
+  //     category: "Plumbing",
+  //     date: "May 15, 2024",
+  //     author: "Rajesh Sharma",
+  //     readTime: 5,
+  //     url: "/blog/top-plumbing-tools",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Top 5 Plumbing Tools Every Homeowner Should Have",
+  //     excerpt:
+  //       "Discover the essential plumbing tools you need for basic home repairs and maintenance. Our experts recommend these must-have items for your toolbox.",
+  //     image: "/images/blog-plumbing-tools.jpg",
+  //     category: "Plumbing",
+  //     date: "May 15, 2024",
+  //     author: "Rajesh Sharma",
+  // <BlogCard blogs={blogs} />
+  //     url: "/blog/top-plumbing-tools",
+  //   },
+  // ];
+
+  // console.log("data", data);
 
   return (
     <section className="py-12 bg-gray-50 dark:bg-gray-900">
@@ -135,7 +151,7 @@ const BlogSection = async () => {
           <span className="text-amber-600 dark:text-amber-400">Blog Posts</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <BlogCard blogs={data} />
+          <BlogCard blogs={blogs} />
         </div>
       </div>
     </section>

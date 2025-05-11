@@ -1,10 +1,12 @@
 "use client";
 import { Lock, ArrowRight, Home, HelpCircle } from "react-feather";
 import { FaContao } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const UnauthorizedPage = () => {
   const router = useRouter();
+  const pathname = usePathname();
+  console.log("pathname", pathname);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center p-4 text-center">
@@ -52,7 +54,7 @@ const UnauthorizedPage = () => {
           Contact Support
         </a>
 
-        {window.location.pathname !== "/login" && (
+        {pathname !== "/login" && (
           <button
             onClick={() => router.push("/login")}
             className="flex items-center text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
@@ -70,7 +72,7 @@ const UnauthorizedPage = () => {
             <strong>Error:</strong> HTTP 403 Forbidden
           </p>
           <p>
-            <strong>Path:</strong> {window.location.pathname}
+            <strong>Path:</strong> {pathname}
           </p>
           <p>
             <strong>Timestamp:</strong> {new Date().toLocaleString()}
