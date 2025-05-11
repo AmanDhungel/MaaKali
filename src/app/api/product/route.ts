@@ -1,6 +1,6 @@
 import connectionDB from "@/connectDB/connectionDB";
-import Product from "@/models/product.js";
-import User from "@/models/user";
+import Product from "@/models/Product";
+import User from "@/models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 

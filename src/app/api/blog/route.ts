@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import connectionDB from "@/connectDB/connectionDB.js";
-import Blog from "@/models/Blog.js";
+import Blog from "@/models/Blog";
 
 export async function GET() {
   try {
