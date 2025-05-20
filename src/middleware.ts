@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 
 export async function middleware(req: NextRequest) {
   const cookieNext = await cookies();
   const token = cookieNext?.get("accessToken")?.value;
-  console.log("Token from middleware:", typeof token);
   try {
     if (!token || typeof token !== "string") {
       return NextResponse.redirect(new URL("/unauthorized", req.url));
@@ -15,6 +13,7 @@ export async function middleware(req: NextRequest) {
       token,
       new TextEncoder().encode(process.env.ACCESS_TOKEN_SECRET!)
     );
+
     if (!decoded) {
       return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
@@ -26,5 +25,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"], // Protect all routes under /api/protected
+  matcher: ["/admin/:path*"],
 };

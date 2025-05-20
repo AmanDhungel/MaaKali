@@ -56,6 +56,7 @@ const Product = () => {
           "isProductNew",
         ]}
         data={tableData}
+        action={true}
       />
     </div>
   );
