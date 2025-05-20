@@ -8,8 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { KEY } from "@/lib/Keys";
+import { DeleteBlog } from "@/services/blog.services";
+import { DeleteProduct } from "@/services/product.services";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 type TableDemoProps = {
   header: string[];
@@ -28,9 +33,42 @@ export function TableDemo({
 }: TableDemoProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const queryClient = useQueryClient();
+
+  const { mutate } = DeleteProduct();
+  const { mutate: blogDelete } = DeleteBlog();
+
+  const handleProductDelete = (id: string) => {
+    mutate(
+      { id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: [KEY.Product] });
+          toast.success("Product deleted successfully");
+        },
+        onError: () => {
+          toast.error("Error deleting product");
+        },
+      }
+    );
+  };
+
+  const handleBlogDelete = (id: string) => {
+    blogDelete(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [KEY.Blog] });
+        toast.success("Blog deleted successfully");
+      },
+      onError: () => {
+        toast.success("Error deleting blog");
+      },
+    });
+  };
+
+  console.log("Table Data", data);
+
   return (
     <Table>
-      <TableCaption>{title}</TableCaption>
       <TableHeader>
         <TableRow>
           {header.map((item, index) => (
@@ -43,18 +81,19 @@ export function TableDemo({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((row, rowIndex) => {
-          console.log("Row", row);
+        {data?.map((row, rowIndex) => {
           return (
             <TableRow key={rowIndex} className="max-w-md overflow-hidden">
               {header.map((col, colIndex) => {
-                console.log("Col", col);
                 return (
                   <TableCell
                     className="md:max-w-[2rem] overflow-ellipsis max-w-md overflow-hidden"
+                    // dangerouslySetInnerHTML={
+                    //   row[col] ? { __html: String(row[col]) } : undefined
+                    // }
                     key={colIndex}>
-                    {row[col] ?? ""}
-                    {col === "Image" && (
+                    {col === "description" ? "" : row[col] ?? ""}
+                    {col === "Image" ? (
                       <Image
                         src={row[col] ? String(row[col]) : ""}
                         alt={String(row["Product Name"])}
@@ -63,6 +102,13 @@ export function TableDemo({
                         height={100}
                         style={{ objectFit: "cover" }}
                       />
+                    ) : col === "description" ? (
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: String(row[col]),
+                        }}></p>
+                    ) : (
+                      ""
                     )}
                   </TableCell>
                 );
@@ -79,7 +125,14 @@ export function TableDemo({
                       }}>
                       Edit
                     </button>
-                    <button className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer">
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer"
+                      onClick={() => {
+                        console.log("Row ID", row);
+                        pathname?.includes("/blog")
+                          ? handleBlogDelete(String(row._id))
+                          : handleProductDelete(String(row._id));
+                      }}>
                       Delete
                     </button>
                   </div>

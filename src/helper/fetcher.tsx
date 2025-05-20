@@ -29,3 +29,17 @@ export const POST = async <T, R>(
   const response = await axios.post<T>(`${BASE_URL}${url}`, data, config);
   return response.data;
 };
+
+export const PUT = async <T, R>(
+  url: string,
+  data: R,
+  config?: AxiosRequestConfig
+): Promise<T> => {
+  const response = await axios.put<T>(`${BASE_URL}${url}`, data, config);
+  return response.data;
+};
+
+export const DELETE = async <T,>(url: string): Promise<T> => {
+  const response = await axios.delete<T>(`${BASE_URL}${url}`);
+  return response.data;
+};

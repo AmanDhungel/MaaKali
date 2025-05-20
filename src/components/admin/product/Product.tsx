@@ -1,7 +1,9 @@
 import { TableDemo } from "@/components/ui/dynamicTable";
+import { GETProducts } from "@/services/product.services";
 import React from "react";
 
 const Product = () => {
+  // const {data} = GETProducts();
   const sampleProducts = [
     {
       name: "Wireless Mouse",
