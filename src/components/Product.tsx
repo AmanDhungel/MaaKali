@@ -1,20 +1,10 @@
+"use client";
+import { GETProducts } from "@/services/product.services";
+import { Loader2 } from "lucide-react";
 import { ShoppingCart, Heart, Star, Eye } from "react-feather";
+import { ProductPropsType } from "@/types/product.types";
 
-const ProductCard = ({
-  product,
-}: {
-  product: {
-    image: string;
-    name: string;
-    category: string;
-    brand: string;
-    price: number;
-    originalPrice: number;
-    rating: number;
-    inStock: boolean;
-    isProductNew: boolean;
-  };
-}) => {
+const ProductCard = ({ product }: { product: ProductPropsType }) => {
   return (
     <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <div className="relative">
@@ -60,11 +50,11 @@ const ProductCard = ({
         <div className="flex items-center justify-between mt-3">
           <div>
             <span className="text-lg font-bold text-gray-900 dark:text-white">
-              Rs. {product.price.toLocaleString()}
+              Rs. {product?.price}
             </span>
             {product.originalPrice && (
               <span className="text-xs text-gray-500 dark:text-gray-400 line-through ml-2">
-                Rs. {product.originalPrice.toLocaleString()}
+                Rs. {product.originalPrice}
               </span>
             )}
           </div>
@@ -88,7 +78,6 @@ const ProductCard = ({
   );
 };
 
-// Example Usage
 const ProductShowcase = () => {
   const sampleProduct = {
     id: 1,
@@ -104,6 +93,7 @@ const ProductShowcase = () => {
     isProductNew: false,
   };
 
+  const { data, isLoading } = GETProducts();
   return (
     <section className="py-12 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -111,7 +101,13 @@ const ProductShowcase = () => {
           Featured Products
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <ProductCard product={sampleProduct} />
+          {isLoading ? (
+            <Loader2 className="animate-spin" />
+          ) : data ? (
+            <ProductCard product={data} />
+          ) : (
+            "No products available"
+          )}
         </div>
       </div>
     </section>

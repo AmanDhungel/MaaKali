@@ -3,24 +3,50 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { Sun, Moon, Menu, X } from "react-feather";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-
-  const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Product", path: "/product" },
-    { name: "Blog", path: "/blog" },
+  const [navLinks, setNavLinks] = useState([
     {
-      name: "About",
-      path: pathname === "/" ? "#about" : "/#about",
+      name: "",
+      path: "",
     },
-    { name: "Services", path: pathname === "/" ? "#services" : "/#services" },
-    { name: "Contact", path: pathname === "/" ? "#contact" : "/#contact" },
-  ];
+  ]);
 
-  console.log("pathname", pathname);
+  useEffect(() => {
+    if (pathname?.startsWith("/admin")) {
+      setNavLinks([
+        { name: "Product", path: "/admin/product" },
+
+        {
+          name: "Blog",
+          path: "/admin/blog",
+        },
+        { name: "Message", path: "/admin/messages" },
+      ]);
+    } else {
+      setNavLinks([
+        { name: "Home", path: "/" },
+        { name: "Product", path: "/product" },
+        { name: "Blog", path: "/blog" },
+        {
+          name: "About",
+          path: pathname?.startsWith("/admin")
+            ? ""
+            : pathname === "/"
+            ? "#about"
+            : "/#about",
+        },
+        {
+          name: "Services",
+          path: pathname === "/" ? "#services" : "/#services",
+        },
+        { name: "Contact", path: pathname === "/" ? "#contact" : "/#contact" },
+      ]);
+    }
+  }, [pathname]);
 
   return (
     <nav className={`bg-white dark:bg-gray-900 shadow-md `}>
@@ -50,12 +76,12 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center space-x-4">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
                 href={link.path}
                 className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
                 {link.name}
-              </a>
+              </Link>
             ))}
           </div>
 

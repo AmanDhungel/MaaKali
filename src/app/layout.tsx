@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { ToastContainer } from "react-toastify";
+import TanStackQuery from "@/context/TanStackQuery";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,10 +31,12 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Navbar />
-        <div className="min-h-[80vh]">{children}</div>
-        <ToastContainer />
-        <Footer />
+        <TanStackQuery>
+          <Navbar />
+          <div className="min-h-[80vh]">{children}</div>
+          <ToastContainer />
+          <Footer />
+        </TanStackQuery>
       </body>
     </html>
   );
