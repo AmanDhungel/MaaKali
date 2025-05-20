@@ -1,5 +1,5 @@
 interface BlogPropsType {
-  id: number;
+  id?: number;
   title: string;
   excerpt: string;
   image: string;

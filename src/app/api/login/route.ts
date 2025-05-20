@@ -59,7 +59,7 @@ export async function POST(request: Request) {
       }
     );
   } catch (error) {
-    console.error(error);
+    console.error("error from login", error);
     return new Response(
       JSON.stringify({ message: "Something went wrong", error }),
       {
