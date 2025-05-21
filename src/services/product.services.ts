@@ -1,7 +1,7 @@
-import { GET } from "@/helper/fetcher";
+import { DELETE, GET } from "@/helper/fetcher";
 import { ApiResponseType } from "@/types/ApiResponseType";
 import { ProductPropsType } from "@/types/product.types";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export const GETProducts = () => {
@@ -13,6 +13,15 @@ export const GETProducts = () => {
     queryKey: ["products"],
     queryFn: () => {
       return GET("product");
+    },
+  });
+};
+
+export const DeleteProduct = () => {
+  return useMutation({
+    mutationKey: ["deleteProduct"],
+    mutationFn: async (data: { id: string }) => {
+      return await DELETE(`product/${data.id}`);
     },
   });
 };

@@ -8,7 +8,7 @@ const BlogCard = ({ blogs }: { blogs: BlogPropsType[] }) => {
     <>
       {blogs.map((blog) => (
         <article
-          key={blog.id}
+          key={blog._id}
           className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
           <div className="relative h-48 w-full overflow-hidden">
             <Image
@@ -51,7 +51,7 @@ const BlogCard = ({ blogs }: { blogs: BlogPropsType[] }) => {
             </p>
 
             <a
-              href={blog.url}
+              href={`/blog/${blog._id}`}
               className="inline-flex items-center text-amber-600 dark:text-amber-400 font-medium hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
               Read More
               <ArrowRight className="h-4 w-4 ml-2" />

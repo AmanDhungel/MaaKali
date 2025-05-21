@@ -8,8 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { KEY } from "@/lib/Keys";
+import { DeleteBlog } from "@/services/blog.services";
+import { DeleteProduct } from "@/services/product.services";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 type TableDemoProps = {
   header: string[];
@@ -28,9 +33,40 @@ export function TableDemo({
 }: TableDemoProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const queryClient = useQueryClient();
+
+  const { mutate } = DeleteProduct();
+  const { mutate: blogDelete } = DeleteBlog();
+
+  const handleProductDelete = (id: string) => {
+    mutate(
+      { id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: [KEY.Product] });
+          toast.success("Product deleted successfully");
+        },
+        onError: () => {
+          toast.error("Error deleting product");
+        },
+      }
+    );
+  };
+
+  const handleBlogDelete = (id: string) => {
+    blogDelete(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [KEY.Blog] });
+        toast.success("Blog deleted successfully");
+      },
+      onError: (err) => {
+        toast.error("Error deleting blog");
+      },
+    });
+  };
+
   return (
-    <Table>
-      <TableCaption>{title}</TableCaption>
+    <Table className="scrollbar-hide">
       <TableHeader>
         <TableRow>
           {header.map((item, index) => (
@@ -43,26 +79,40 @@ export function TableDemo({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((row, rowIndex) => {
-          console.log("Row", row);
+        {data?.map((row, rowIndex) => {
           return (
             <TableRow key={rowIndex} className="max-w-md overflow-hidden">
               {header.map((col, colIndex) => {
-                console.log("Col", col);
                 return (
                   <TableCell
-                    className="md:max-w-[2rem] overflow-ellipsis max-w-md overflow-hidden"
+                    className=" scrollbar-hidden md:max-w-[2rem] overflow-ellipsis max-w-md overflow-scroll scroll-smooth "
                     key={colIndex}>
-                    {row[col] ?? ""}
-                    {col === "Image" && (
-                      <Image
-                        src={row[col] ? String(row[col]) : ""}
-                        alt={String(row["Product Name"])}
-                        className="w-10 h-10"
-                        width={100}
-                        height={100}
-                        style={{ objectFit: "cover" }}
-                      />
+                    {col === "description"
+                      ? ""
+                      : col === "image"
+                      ? ""
+                      : row[col] ?? ""}
+                    {col === "Image" || col === "image" ? (
+                      !row[col] ? (
+                        ""
+                      ) : (
+                        <Image
+                          src={row[col] ? String(row[col]) : ""}
+                          alt={String(row["Product Name"])}
+                          className="w-10 h-10"
+                          width={100}
+                          height={100}
+                          style={{ objectFit: "cover" }}
+                        />
+                      )
+                    ) : col === "description" ? (
+                      <p
+                        className="max-h-[5rem]"
+                        dangerouslySetInnerHTML={{
+                          __html: String(row[col]),
+                        }}></p>
+                    ) : (
+                      ""
                     )}
                   </TableCell>
                 );
@@ -74,12 +124,18 @@ export function TableDemo({
                       className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
                       onClick={() => {
                         pathname?.includes("/blog")
-                          ? router.push(`/admin/addblog/${row.id}`)
-                          : router.push(`/admin/addproduct/${row.id}`);
+                          ? router.push(`/admin/addblog/${row._id}`)
+                          : router.push(`/admin/addproduct/${row._id}`);
                       }}>
                       Edit
                     </button>
-                    <button className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer">
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer"
+                      onClick={() => {
+                        pathname?.includes("/blog")
+                          ? handleBlogDelete(String(row._id))
+                          : handleProductDelete(String(row._id));
+                      }}>
                       Delete
                     </button>
                   </div>
