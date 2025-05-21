@@ -1,3 +1,4 @@
+import { BlogPostFormProps } from "@/components/admin/blog/AddBlog";
 import { DELETE, GET, POST } from "@/helper/fetcher";
 import { KEY } from "@/lib/Keys";
 import { ApiResponseType } from "@/types/ApiResponseType";
@@ -17,11 +18,24 @@ export const GETBlogs = () => {
   });
 };
 
-export const GETSingleProduct = async (id: string) => {
-  return useQuery({
-    queryKey: ["products"],
-    queryFn: () => {
-      return GET(`product/${id}`);
+export const GETSingleBlog = (id: string) => {
+  return useQuery<
+    ApiResponseType<BlogPropsType>,
+    AxiosError<{ message: string; error: Record<string, unknown> }>,
+    BlogPropsType
+  >({
+    queryKey: [KEY.Blog, id],
+    queryFn: async () => {
+      return GET<ApiResponseType<BlogPropsType>>(`blog/${id}`);
+    },
+  });
+};
+
+export const AddBlogPost = () => {
+  return useMutation({
+    mutationKey: [KEY.Blog],
+    mutationFn: async (data: BlogPostFormProps) => {
+      return await POST("blog", data);
     },
   });
 };

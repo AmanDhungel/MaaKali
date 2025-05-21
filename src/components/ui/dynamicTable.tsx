@@ -59,16 +59,14 @@ export function TableDemo({
         queryClient.invalidateQueries({ queryKey: [KEY.Blog] });
         toast.success("Blog deleted successfully");
       },
-      onError: () => {
-        toast.success("Error deleting blog");
+      onError: (err) => {
+        toast.error("Error deleting blog");
       },
     });
   };
 
-  console.log("Table Data", data);
-
   return (
-    <Table>
+    <Table className="scrollbar-hide">
       <TableHeader>
         <TableRow>
           {header.map((item, index) => (
@@ -87,23 +85,29 @@ export function TableDemo({
               {header.map((col, colIndex) => {
                 return (
                   <TableCell
-                    className="md:max-w-[2rem] overflow-ellipsis max-w-md overflow-hidden"
-                    // dangerouslySetInnerHTML={
-                    //   row[col] ? { __html: String(row[col]) } : undefined
-                    // }
+                    className=" scrollbar-hidden md:max-w-[2rem] overflow-ellipsis max-w-md overflow-scroll scroll-smooth "
                     key={colIndex}>
-                    {col === "description" ? "" : row[col] ?? ""}
-                    {col === "Image" ? (
-                      <Image
-                        src={row[col] ? String(row[col]) : ""}
-                        alt={String(row["Product Name"])}
-                        className="w-10 h-10"
-                        width={100}
-                        height={100}
-                        style={{ objectFit: "cover" }}
-                      />
+                    {col === "description"
+                      ? ""
+                      : col === "image"
+                      ? ""
+                      : row[col] ?? ""}
+                    {col === "Image" || col === "image" ? (
+                      !row[col] ? (
+                        ""
+                      ) : (
+                        <Image
+                          src={row[col] ? String(row[col]) : ""}
+                          alt={String(row["Product Name"])}
+                          className="w-10 h-10"
+                          width={100}
+                          height={100}
+                          style={{ objectFit: "cover" }}
+                        />
+                      )
                     ) : col === "description" ? (
                       <p
+                        className="max-h-[5rem]"
                         dangerouslySetInnerHTML={{
                           __html: String(row[col]),
                         }}></p>
@@ -120,15 +124,14 @@ export function TableDemo({
                       className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
                       onClick={() => {
                         pathname?.includes("/blog")
-                          ? router.push(`/admin/addblog/${row.id}`)
-                          : router.push(`/admin/addproduct/${row.id}`);
+                          ? router.push(`/admin/addblog/${row._id}`)
+                          : router.push(`/admin/addproduct/${row._id}`);
                       }}>
                       Edit
                     </button>
                     <button
                       className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer"
                       onClick={() => {
-                        console.log("Row ID", row);
                         pathname?.includes("/blog")
                           ? handleBlogDelete(String(row._id))
                           : handleProductDelete(String(row._id));

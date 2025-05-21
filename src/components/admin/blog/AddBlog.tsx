@@ -1,15 +1,24 @@
 "use client";
+import { AddBlogPost, GETSingleBlog } from "@/services/blog.services";
 import axios from "axios";
 import { CldUploadButton } from "next-cloudinary";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Plus, Trash2 } from "react-feather";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import RichTextEditor from "@/components/ui/TextEditor";
+import "froala-editor/css/froala_style.min.css";
+import "froala-editor/css/froala_editor.pkgd.min.css";
 
-interface BlogPostFormProps {
+import FroalaEditorComponent from "react-froala-wysiwyg";
+import { Cross } from "lucide-react";
+import { FaDeleteLeft } from "react-icons/fa6";
+import { useParams } from "next/navigation";
+
+export interface BlogPostFormProps {
   title: string;
   excerpt: string;
-  content: string;
+  description: string;
   author: string;
   tags: string[];
   image: string;
@@ -19,6 +28,11 @@ interface BlogPostFormProps {
 const AddBlog = () => {
   const [tagInput, setTagInput] = useState("");
   const [relatedPostInput, setRelatedPostInput] = useState("");
+  const [state, setState] = useState({
+    image: "",
+    tags: [] as string[],
+    relatedPosts: [] as string[],
+  });
 
   const {
     register,
@@ -31,28 +45,34 @@ const AddBlog = () => {
     defaultValues: {
       title: "",
       excerpt: "",
-      content: "",
+      description: "",
       author: "",
       tags: [] as string[],
       image: "",
       relatedPosts: [] as string[],
     },
   });
+
+  const { mutate } = AddBlogPost();
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, []);
   const onSubmit = async (data: BlogPostFormProps) => {
-    try {
-      const res = await axios.post("http://localhost:3000/api/blog", data);
-      toast.success("Blog post submitted successfully!", {
-        autoClose: 2000,
-        theme: "colored",
-      });
-      reset();
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        toast.warn(error.response.data?.error || "Something went wrong");
-      } else {
-        toast.warn("Something went wrong");
-      }
-    }
+    mutate(data, {
+      onSuccess: () => {
+        toast.success("Blog post added successfully!");
+        reset();
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error) && error.response) {
+          toast.error(error.response.data?.error || "Something went wrong");
+        } else {
+          toast.error("Something went wrong");
+        }
+      },
+    });
   };
 
   const addTag = () => {
@@ -69,6 +89,10 @@ const AddBlog = () => {
       "tags",
       currentTags.filter((_, i) => i !== index)
     );
+    setState((prev) => ({
+      ...prev,
+      tags: currentTags.filter((_, i) => i !== index),
+    }));
   };
 
   const addRelatedPost = () => {
@@ -78,6 +102,7 @@ const AddBlog = () => {
         ...currentRelatedPosts,
         relatedPostInput.trim(),
       ]);
+
       setRelatedPostInput("");
     }
   };
@@ -88,11 +113,42 @@ const AddBlog = () => {
       "relatedPosts",
       currentRelatedPosts.filter((_, i) => i !== index)
     );
+    setState((prev) => ({
+      ...prev,
+      relatedPosts: currentRelatedPosts.filter((_, i) => i !== index),
+    }));
   };
+  const params = useParams();
+  const blog = params ? params["blog"] : undefined;
+  const { data } = GETSingleBlog(blog as string);
+
+  useEffect(() => {
+    if (data) {
+      reset({
+        title: data.title,
+        excerpt: data.excerpt,
+        description: data.description,
+        author: data.author,
+        tags:
+          "tags" in data && Array.isArray((data as any).tags)
+            ? (data as any).tags
+            : [],
+        image: data.image,
+        relatedPosts:
+          "relatedPosts" in data && Array.isArray(data.relatedPosts)
+            ? (data.relatedPosts as (string | undefined)[])
+            : [],
+      });
+    }
+  }, [data, reset]);
+
+  console.log("state", getValues());
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 ">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 w-full m-auto">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6 w-11/12 m-auto p-4 border-2 rounded-md mt-10">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 w-full ">
         <div className="flex flex-col space-y-4">
           <label className="text-sm font-medium">Title</label>
           <input
@@ -125,12 +181,19 @@ const AddBlog = () => {
           )}
         </div>
 
-        <div className="col-span-full flex flex-col space-y-4">
+        <div className="col-span-full flex w- flex-col space-y-4">
           <label className="text-sm font-medium">Content</label>
-
-          {errors.content && (
+          {isMounted && (
+            <FroalaEditorComponent
+              model={getValues("description") ?? ""}
+              onModelChange={(e: string) => {
+                setValue("description", e);
+              }}
+            />
+          )}
+          {errors.description && (
             <span className="text-red-500 text-sm">
-              {errors.content.message?.toString()}
+              {errors.description.message?.toString()}
             </span>
           )}
         </div>
@@ -160,20 +223,37 @@ const AddBlog = () => {
               if (
                 data.info &&
                 typeof data.info === "object" &&
+                data.info !== null &&
                 "url" in data.info
               ) {
-                setValue("image", data.info.url as string);
+                const imageUrl = (data.info as { url: string }).url;
+                setState((prev) => ({
+                  ...prev,
+                  image: "asdasd",
+                }));
+                setValue("image", imageUrl);
               } else {
                 toast.error("Failed to upload image");
               }
             }}
           />
           {getValues("image") && (
-            <div className="mt-2">
+            <div className="w-fit" title="Remove image">
+              <Cross
+                className="ml-auto -mt-5 bg-amber-400 relative top-6 rotate-45 cursor-pointer text-2xl text-red-500"
+                onClick={() => {
+                  setValue("image", "");
+                  setState((prev) => ({
+                    ...prev,
+                    image: "",
+                  }));
+                }}
+              />
               <img
                 src={getValues("image")}
                 alt="Preview"
                 className="h-20 w-auto"
+                title="Image"
               />
             </div>
           )}

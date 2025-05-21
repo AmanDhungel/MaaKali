@@ -2,9 +2,11 @@ import connectionDB from "@/connectDB/connectionDB";
 import Product from "@/models/Product";
 import { NextRequest } from "next/server";
 
-export async function DELETE(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const product = searchParams.get("product");
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ product: string }> }
+) {
+  const { product } = await params;
   try {
     await connectionDB();
     const deletedProduct = await Product.findByIdAndDelete(product);

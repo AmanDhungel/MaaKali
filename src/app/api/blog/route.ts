@@ -19,13 +19,22 @@ export async function POST(req: NextRequest) {
   await connectionDB();
   const body = await req.json();
   try {
-    const { title, content, comments, excerpt, image, tags, relatedPosts } =
-      body;
-    const blog = new Blog({
+    const {
       title,
-      content,
+      author,
+      description,
+      comments,
+      excerpt,
       image,
       tags,
+      relatedPosts,
+    } = body;
+    const blog = new Blog({
+      title,
+      description,
+      image,
+      tags,
+      author,
       relatedPosts,
       comments,
       excerpt,
@@ -33,7 +42,6 @@ export async function POST(req: NextRequest) {
     await blog.save();
     return new Response(JSON.stringify(blog), { status: 201 });
   } catch (error) {
-    console.log("Error in POST /api/blog:", error);
     return new Response(
       JSON.stringify({ message: "Something went wrong", error }),
       { status: 500 }

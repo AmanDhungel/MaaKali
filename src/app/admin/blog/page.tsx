@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 
 const BlogPostForm = () => {
   const { data } = GETBlogs();
-  const router = useRouter();
   return (
     <>
       <Link
@@ -18,7 +17,7 @@ const BlogPostForm = () => {
       <div className="w-11/12 m-auto">
         <TableDemo
           title="Blogs"
-          header={["title", "description", "tags", "relatedPosts"]}
+          header={["title", "description", "tags", "relatedPosts", "image"]}
           data={data as any}
           action={true}
         />
