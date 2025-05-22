@@ -50,6 +50,7 @@ export function TableDemo({
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: [KEY.Product] });
           toast.success("Product deleted successfully");
+          dailogClose();
         },
         onError: () => {
           toast.error("Error deleting product");
@@ -58,7 +59,6 @@ export function TableDemo({
     );
   };
   const dailogClose = useBlogStore((state) => state.setDailogClose);
-  const dailogOpen = useBlogStore((state) => state.setDailogOpen);
 
   const handleBlogDelete = (id: string) => {
     blogDelete(id, {
@@ -67,7 +67,7 @@ export function TableDemo({
         toast.success("Blog deleted successfully");
         dailogClose();
       },
-      onError: (err) => {
+      onError: () => {
         toast.error("Error deleting blog");
       },
     });
@@ -80,12 +80,10 @@ export function TableDemo({
         <h1 className="text-2xl font-bold">No Data Found !</h1>
         <Link
           href={
-            pathname?.startsWith("/admin")
-              ? "/admin/addblog"
-              : "/admin/addproduct"
+            pathname?.includes("/blog") ? "/admin/addblog" : "/admin/addproduct"
           }>
           <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
-            {pathname?.startsWith("/admin") ? "Add Blog" : "Add Product"}
+            {pathname?.includes("/blog") ? "Add Blog" : "Add Product"}
           </button>
         </Link>
       </div>
@@ -97,11 +95,7 @@ export function TableDemo({
       <TableHeader>
         <TableRow>
           {header.map((item, index) => (
-            <TableHead
-              key={index}
-              className={index === header.length - 1 ? "text-left" : ""}>
-              {item}
-            </TableHead>
+            <TableHead key={index}>{item}</TableHead>
           ))}
         </TableRow>
       </TableHeader>
@@ -115,11 +109,11 @@ export function TableDemo({
             );
           }
           return (
-            <TableRow key={rowIndex} className="max-w-md overflow-hidden">
+            <TableRow key={rowIndex} className="max-w-md ">
               {header.map((col, colIndex) => {
                 return (
                   <TableCell
-                    className=" scrollbar-hidden md:max-w-[2rem] overflow-ellipsis max-w-md overflow-scroll scroll-smooth "
+                    className=" scrollbar-hidden md:max-w-[2rem]  max-w-md overflow-scroll scroll-smooth "
                     key={colIndex}>
                     {col === "description"
                       ? ""
@@ -168,7 +162,11 @@ export function TableDemo({
                       btnText="Delete"
                       description="Are you sure you want to delete this blog?"
                       onClickEvent={() => {
-                        handleBlogDelete(row._id as string);
+                        pathname?.includes("/blog")
+                          ? handleBlogDelete(row._id as string)
+                          : pathname?.includes("/product")
+                          ? handleProductDelete(row._id as string)
+                          : "";
                       }}
                       submitText="Delete"
                     />

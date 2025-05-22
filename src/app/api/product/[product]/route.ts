@@ -7,6 +7,7 @@ export async function DELETE(
   { params }: { params: Promise<{ product: string }> }
 ) {
   const { product } = await params;
+  console.log("Product ID", product);
   try {
     await connectionDB();
     const deletedProduct = await Product.findByIdAndDelete(product);
@@ -17,6 +18,7 @@ export async function DELETE(
     }
     return new Response(JSON.stringify(deletedProduct), { status: 200 });
   } catch (error) {
+    console.error("Error deleting product:", error);
     return new Response(
       JSON.stringify({ message: "Something went wrong", error }),
       { status: 500 }

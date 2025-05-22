@@ -2,24 +2,21 @@ import mongoose from "mongoose";
 
 const blogSchema = new mongoose.Schema(
   {
-    title: String,
-    excerpt: String,
-    description: String,
-    author: String,
-    tags: [String],
-    image: {
-      type: String,
-      required: true,
-    },
+    title: { type: String, required: true },
+    excerpt: { type: String, required: true },
+    description: { type: String, required: true },
+    author: { type: String, required: true },
+    tags: { type: [String], required: true },
+    image: { type: String, required: true },
     comments: [
       {
-        name: String,
-        email: String,
-        comment: String,
-        date: String,
+        name: { type: String, required: true },
+        email: { type: String, required: true },
+        comment: { type: String, required: true },
+        date: { type: String, required: true },
       },
     ],
-    relatedPosts: [String],
+    relatedPosts: { type: [String], required: true },
   },
   { timestamps: true }
 );

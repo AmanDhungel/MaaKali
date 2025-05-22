@@ -10,7 +10,6 @@ export interface ApiResponseType<T> {
     current_page: number;
     last_page: number;
   };
-  // move this later to TrialResponse only
   sites?: {
     id: number;
     label: string;

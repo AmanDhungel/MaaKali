@@ -2,9 +2,26 @@
 import { GETBlogs } from "@/services/blog.services";
 import { BlogPostFormProps } from "@/types/blog.types";
 import Image from "next/image";
-import { Calendar, Clock, User, ArrowRight, Loader } from "react-feather";
+import {
+  Calendar,
+  Clock,
+  User,
+  ArrowRight,
+  Loader,
+  Smile,
+} from "react-feather";
 
 const BlogCard = ({ blogs }: { blogs: BlogPostFormProps[] }) => {
+  if (!blogs || blogs.length === 0) {
+    return (
+      <div className="text-center text-3xl w-[90vw] md:w-[95vw] 2xl:w-[58vw] overflow-hidden rounded-md p-4 mt-10  dark:bg-gray-800 text-black font-bold dark:text-white">
+        <Smile className="inline-block mr-2 h-12 w-12 text-amber-500" />
+        No Blog Posts Available!
+      </div>
+    );
+  }
+
+  console.log(blogs);
   return (
     <>
       {blogs.map((blog) => (
@@ -73,7 +90,7 @@ const BlogSection = () => {
           <Loader className="animate-spin flex m-auto w-12 h-12" />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <BlogCard blogs={data ?? []} />
+            <BlogCard blogs={data as any} />
           </div>
         )}
       </div>

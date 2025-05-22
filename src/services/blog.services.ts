@@ -9,7 +9,7 @@ export const GETBlogs = () => {
   return useQuery<
     ApiResponseType<BlogPostFormProps[]>,
     AxiosError<{ message: string; error: Record<string, unknown> }>,
-    BlogPostFormProps[]
+    ApiResponseType<BlogPostFormProps[]>
   >({
     queryKey: [KEY.Blog],
     queryFn: () => {

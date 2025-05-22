@@ -3,41 +3,11 @@ import { GETProducts } from "@/services/product.services";
 import React from "react";
 
 const Product = () => {
-  // const {data} = GETProducts();
-  const sampleProducts = [
-    {
-      name: "Wireless Mouse",
-      category: "Electronics",
-      brand: "Logitech",
-      price: 29.99,
-      originalPrice: 39.99,
-      rating: 4.5,
-      inStock: true,
-      isProductNew: false,
-    },
-    {
-      name: "Bluetooth Headphones",
-      category: "Electronics",
-      brand: "Sony",
-      price: 99.99,
-      originalPrice: 129.99,
-      rating: 4.7,
-      inStock: true,
-      isProductNew: true,
-    },
-    {
-      name: "Running Shoes",
-      category: "Footwear",
-      brand: "Nike",
-      price: 59.99,
-      originalPrice: 79.99,
-      rating: 4.3,
-      inStock: false,
-      isProductNew: false,
-    },
-  ];
+  const { data } = GETProducts();
 
-  const tableData = sampleProducts.map((product) => ({
+  console.log("data", data);
+
+  const tableData = data?.map((product) => ({
     ...product,
     inStock: product.inStock ? "Yes" : "No",
     isProductNew: product.isProductNew ? "Yes" : "No",
@@ -48,6 +18,7 @@ const Product = () => {
       <TableDemo
         title="Products"
         header={[
+          "image",
           "name",
           "category",
           "brand",
@@ -56,8 +27,12 @@ const Product = () => {
           "rating",
           "inStock",
           "isProductNew",
+          "features",
+          "description",
+          "specifications",
+          "relatedProducts",
         ]}
-        data={tableData}
+        data={tableData as any}
         action={true}
       />
     </div>
