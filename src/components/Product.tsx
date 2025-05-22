@@ -2,9 +2,10 @@
 import { GETProducts } from "@/services/product.services";
 import { Loader2 } from "lucide-react";
 import { ShoppingCart, Heart, Star, Eye } from "react-feather";
-import { ProductPropsType } from "@/types/product.types";
+import { ProductFormProps } from "@/types/product.types";
 
-const ProductCard = ({ product }: { product: ProductPropsType }) => {
+const ProductCard = ({ product }: { product: ProductFormProps }) => {
+  console.log(product);
   return (
     <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <div className="relative">
@@ -79,20 +80,6 @@ const ProductCard = ({ product }: { product: ProductPropsType }) => {
 };
 
 const ProductShowcase = () => {
-  const sampleProduct = {
-    id: 1,
-    name: "High Quality Chrome Plated Water Tap",
-    category: "Plumbing",
-    brand: "Jaquar",
-    price: 2450,
-    originalPrice: 2999,
-    rating: 4.5,
-    image:
-      "https://images.pexels.com/photos/2583028/pexels-photo-2583028.jpeg?auto=compress&cs=tinysrgb&w=600",
-    inStock: true,
-    isProductNew: false,
-  };
-
   const { data, isLoading } = GETProducts();
   return (
     <section className="py-12 bg-gray-50 dark:bg-gray-900">
@@ -104,7 +91,9 @@ const ProductShowcase = () => {
           {isLoading ? (
             <Loader2 className="animate-spin" />
           ) : data ? (
-            <ProductCard product={data} />
+            data.map((product: ProductFormProps) => (
+              <ProductCard key={product._id} product={product} />
+            ))
           ) : (
             "No products available"
           )}

@@ -1,16 +1,17 @@
 import { DELETE, GET } from "@/helper/fetcher";
+import { KEY } from "@/lib/Keys";
 import { ApiResponseType } from "@/types/ApiResponseType";
-import { ProductPropsType } from "@/types/product.types";
+import { ProductFormProps } from "@/types/product.types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export const GETProducts = () => {
   return useQuery<
-    ApiResponseType<ProductPropsType[]>,
+    ApiResponseType<ProductFormProps[]>,
     AxiosError<{ message: string; error: Record<string, unknown> }>,
-    ProductPropsType
+    ProductFormProps[]
   >({
-    queryKey: ["products"],
+    queryKey: [KEY.Product],
     queryFn: () => {
       return GET("product");
     },
@@ -19,7 +20,7 @@ export const GETProducts = () => {
 
 export const DeleteProduct = () => {
   return useMutation({
-    mutationKey: ["deleteProduct"],
+    mutationKey: [KEY.Product],
     mutationFn: async (data: { id: string }) => {
       return await DELETE(`product/${data.id}`);
     },
