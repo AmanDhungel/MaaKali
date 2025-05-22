@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-const BASE_URL = process.env.NEXT_API_URL;
+const BASE_URL = `${process.env.NEXT_API_URL}/api/`;
 
 interface ApiProps {
   url: string;
