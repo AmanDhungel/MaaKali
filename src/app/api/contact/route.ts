@@ -1,21 +1,21 @@
-import Blog from "@/models/Blog";
+import Contact from "@/models/Contact";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
-  const body = await req.json();
-  const { name, email, phonenumber, message } = body;
+export async function GET() {
   try {
-    const res = Blog.find();
+    const res = await Contact.find();
     return NextResponse.json({
       message: "Contact fetched successfully",
       data: res,
       status: 200,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({
       message: "Contact not fetched",
       data: null,
       status: 500,
+      error: error instanceof Error ? error.message : String(error),
     });
   }
 }
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   const body = await req.json();
   const { name, email, phonenumber, message } = body;
   try {
-    const res = await Blog.create({
+    const res = await Contact.create({
       name,
       email,
       phonenumber,

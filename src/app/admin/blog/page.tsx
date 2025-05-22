@@ -2,11 +2,12 @@
 
 import { TableDemo } from "@/components/ui/dynamicTable";
 import { GETBlogs } from "@/services/blog.services";
+import { Loader } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const BlogPostForm = () => {
-  const { data } = GETBlogs();
+  const { data, isLoading } = GETBlogs();
   return (
     <>
       <Link
@@ -15,12 +16,16 @@ const BlogPostForm = () => {
         Add Blog
       </Link>
       <div className="w-11/12 m-auto">
-        <TableDemo
-          title="Blogs"
-          header={["title", "description", "tags", "relatedPosts", "image"]}
-          data={data as any}
-          action={true}
-        />
+        {isLoading ? (
+          <Loader className="animate-spin flex m-auto w-12 h-12" />
+        ) : (
+          <TableDemo
+            title="Blogs"
+            header={["title", "description", "tags", "relatedPosts", "image"]}
+            data={data as any}
+            action={true}
+          />
+        )}
       </div>
     </>
   );

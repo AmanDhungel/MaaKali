@@ -1,6 +1,40 @@
+"use client";
+import { PostContact } from "@/services/contact.services";
 import { MapPin, Phone, Mail, Clock, MessageSquare } from "react-feather";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+const queryClient = new QueryClient();
 
-const ContactUsSection = () => {
+const ContactUsSectionContent = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    },
+  });
+
+  const { mutate } = PostContact();
+
+  const onSubmit = async (data: any) => {
+    mutate(data, {
+      onSuccess: () => {
+        toast.success("message sent successfully");
+        reset();
+      },
+      onError: () => {
+        toast.error("error while sending message");
+      },
+    });
+  };
+
   return (
     <section className="py-16 bg-gray-50 dark:bg-gray-900" id="contact">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -109,7 +143,7 @@ const ContactUsSection = () => {
             <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
               Send Us a Message
             </h3>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <label
                   htmlFor="name"
@@ -119,10 +153,13 @@ const ContactUsSection = () => {
                 <input
                   type="text"
                   id="name"
-                  name="name"
+                  {...register("name", { required: true })}
                   required
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:text-white"
                 />
+                {errors.name && (
+                  <span className="text-red-500 text-sm">Name is required</span>
+                )}
               </div>
               <div>
                 <label
@@ -133,10 +170,15 @@ const ContactUsSection = () => {
                 <input
                   type="email"
                   id="email"
-                  name="email"
+                  {...register("email", { required: true })}
                   required
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:text-white"
                 />
+                {errors.email && (
+                  <span className="text-red-500 text-sm">
+                    Email is required
+                  </span>
+                )}
               </div>
               <div>
                 <label
@@ -147,9 +189,14 @@ const ContactUsSection = () => {
                 <input
                   type="tel"
                   id="phone"
-                  name="phone"
+                  {...register("phone", { required: true })}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:text-white"
                 />
+                {errors.phone && (
+                  <span className="text-red-500 text-sm">
+                    Phone Number is required
+                  </span>
+                )}
               </div>
               <div>
                 <label
@@ -159,9 +206,14 @@ const ContactUsSection = () => {
                 </label>
                 <textarea
                   id="message"
-                  name="message"
+                  {...register("message", { required: true })}
                   required
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:text-white"></textarea>
+                {errors.message && (
+                  <span className="text-red-500 text-sm">
+                    Message is required
+                  </span>
+                )}
               </div>
               <button
                 type="submit"
@@ -187,9 +239,24 @@ const ContactUsSection = () => {
             leading <strong>hardware store near me</strong> in Bhaktapur.
           </p>
         </div>
+        <div className="mt-8 text-center">
+          <a
+            href="https://maps.app.goo.gl/P2vyKJctPfcETxL96"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            Visit Our Store
+          </a>
+        </div>
       </div>
     </section>
   );
 };
+
+const ContactUsSection = () => (
+  <QueryClientProvider client={queryClient}>
+    <ContactUsSectionContent />
+  </QueryClientProvider>
+);
 
 export default ContactUsSection;

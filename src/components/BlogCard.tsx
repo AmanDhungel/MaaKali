@@ -1,14 +1,15 @@
 "use client";
 import { GETBlogs } from "@/services/blog.services";
+import { BlogPostFormProps } from "@/types/blog.types";
 import Image from "next/image";
 import { Calendar, Clock, User, ArrowRight, Loader } from "react-feather";
 
-const BlogCard = ({ blogs }: { blogs: BlogPropsType[] }) => {
+const BlogCard = ({ blogs }: { blogs: BlogPostFormProps[] }) => {
   return (
     <>
       {blogs.map((blog) => (
         <article
-          key={blog._id}
+          key={blog.id}
           className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
           <div className="relative h-48 w-full overflow-hidden">
             <Image
@@ -35,10 +36,6 @@ const BlogCard = ({ blogs }: { blogs: BlogPropsType[] }) => {
               <span className="flex items-center">
                 <User className="h-4 w-4 mr-1" />
                 {blog.author}
-              </span>
-              <span className="flex items-center">
-                <Clock className="h-4 w-4 mr-1" />
-                {blog.readTime} min read
               </span>
             </div>
 
