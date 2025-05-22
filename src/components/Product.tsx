@@ -5,7 +5,6 @@ import { ShoppingCart, Heart, Star, Eye } from "react-feather";
 import { ProductFormProps } from "@/types/product.types";
 
 const ProductCard = ({ product }: { product: ProductFormProps }) => {
-  console.log(product);
   return (
     <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <div className="relative">
