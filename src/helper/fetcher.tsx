@@ -8,7 +8,6 @@ interface ApiProps {
 }
 
 export const GET = async <T,>(url: string): Promise<T> => {
-  const app = "";
   try {
     const response = await axios.get<T>(`${BASE_URL}${url}`);
     return response.data;
