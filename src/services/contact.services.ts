@@ -1,10 +1,8 @@
 import { DELETE, GET, POST } from "@/helper/fetcher";
 import { KEY } from "@/lib/Keys";
 import { ApiResponseType } from "@/types/ApiResponseType";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-
-const queryclient = useQueryClient();
 
 export interface ContactProps {
   id: string;
@@ -13,7 +11,7 @@ export interface ContactProps {
   phonenumber: string;
   message: string;
 }
-const GetContacts = async () => {
+const GetContacts = () => {
   return useQuery<
     ApiResponseType<ContactProps[]>,
     AxiosError<{ message: string; error: Record<string, unknown> }>,
@@ -26,11 +24,11 @@ const GetContacts = async () => {
   });
 };
 
-const PostContact = async () => {
+const PostContact = () => {
   return useMutation({
     mutationKey: [KEY.Contact],
-    mutationFn: async (data: ContactProps) => {
-      return await POST("contact", data);
+    mutationFn: (data: ContactProps) => {
+      return POST("contact", data);
     },
   });
 };

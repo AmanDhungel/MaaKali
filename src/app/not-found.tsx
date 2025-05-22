@@ -69,7 +69,7 @@ const NotFoundPage = () => {
         <Mail className="h-4 w-4 mr-2" />
         Can't find what you need?{" "}
         <a
-          href="/contact"
+          href="/#contact"
           className="ml-1 text-amber-600 dark:text-amber-400 hover:underline">
           Contact us
         </a>

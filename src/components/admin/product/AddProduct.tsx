@@ -4,46 +4,30 @@ import { CldUploadButton } from "next-cloudinary";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-interface ProductFormProps {
-  image: string;
-  name: string;
-  category: string;
-  brand: string;
-  price: number;
-  originalPrice?: number;
-  rating: number;
-  inStock: boolean;
-  isProductNew: boolean;
-  features: string[];
-  description: string;
-  specifications: string[];
-  relatedProducts: string[];
-}
+const ProductForm = z.object({
+  image: z.string().min(1, "Image is required"),
+  name: z.string().min(1, "Name is required"),
+  category: z.string().min(1, "Category is required"),
+  brand: z.string().min(1, "Brand is required"),
+  price: z.number().min(0, "Price must be a positive number"),
+  originalPrice: z.number().optional(),
+  rating: z.number().min(1).max(5),
+  inStock: z.boolean(),
+  isProductNew: z.boolean(),
+  features: z.array(z.string()).optional(),
+  description: z.string().min(1, "Description is required"),
+  specifications: z.array(z.string()).optional(),
+  relatedProducts: z.array(z.string()).optional(),
+});
+
+export type ProductFormProps = z.infer<typeof ProductForm>;
 
 const AddProduct = () => {
-  const {
-    register,
-    setValue,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({
-    defaultValues: {
-      image: "",
-      name: "",
-      category: "",
-      brand: "",
-      price: 0,
-      originalPrice: undefined,
-      rating: 0,
-      inStock: true,
-      isProductNew: false,
-      features: [],
-      description: "",
-      specifications: [],
-      relatedProducts: [],
-    },
+  const form = useForm({
+    resolver: zodResolver(ProductForm),
   });
 
   const onSubmit = async (data: ProductFormProps) => {
@@ -53,7 +37,7 @@ const AddProduct = () => {
         autoClose: 2000,
         theme: "colored",
       });
-      reset();
+      form.reset();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         toast.warn(error.response.data?.error || "Something went wrong");
@@ -65,7 +49,7 @@ const AddProduct = () => {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={form.handleSubmit(onSubmit)}
       className="space-y-6 mt-10 border-2 border-gray-300 p-4 py-20 rounded-md shadow-md bg-white w-full max-w-3xl m-auto"
       encType="multipart/form-data">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 w-3/4 m-auto">
@@ -73,14 +57,14 @@ const AddProduct = () => {
           <label className="text-sm font-medium">Product Name</label>
           <input
             type="text"
-            {...register("name", { required: "Product name is required" })}
+            {...form.register("name", { required: "Product name is required" })}
             className={`border p-2 rounded-md w-full ${
-              errors.name ? "border-red-500" : "border-gray-300"
+              form.formState.errors.name ? "border-red-500" : "border-gray-300"
             }`}
           />
-          {errors.name && (
+          {form.formState.errors.name && (
             <span className="text-red-500 text-sm">
-              {errors.name.message?.toString()}
+              {form.formState.errors.name.message?.toString()}
             </span>
           )}
         </div>
@@ -89,9 +73,11 @@ const AddProduct = () => {
           <label className="text-sm font-medium">Category</label>
           <select
             id="rating"
-            {...register("category", { required: "Rating is required" })}
+            {...form.register("category", { required: "Rating is required" })}
             className={`p-2 rounded-md border ${
-              errors.rating ? "border-red-500" : "border-gray-300"
+              form.formState.errors.rating
+                ? "border-red-500"
+                : "border-gray-300"
             } bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500`}>
             <option value="">-- Choose Category --</option>
             {[
@@ -108,9 +94,9 @@ const AddProduct = () => {
               </option>
             ))}
           </select>
-          {errors.category && (
+          {form.formState.errors.category && (
             <span className="text-red-500 text-sm">
-              {errors.category.message?.toString()}
+              {form.formState.errors.category.message?.toString()}
             </span>
           )}
         </div>
@@ -126,16 +112,16 @@ const AddProduct = () => {
                 typeof data.info === "object" &&
                 "url" in data.info
               ) {
-                setValue("image", data.info.url as string);
+                form.setValue("image", data.info.url as string);
               } else {
                 toast.error("Failed to upload image");
               }
             }}
           />
 
-          {errors.brand && (
+          {form.formState.errors.brand && (
             <span className="text-red-500 text-sm">
-              {errors.brand.message?.toString()}
+              {form.formState.errors.brand.message?.toString()}
             </span>
           )}
         </div>
@@ -143,14 +129,14 @@ const AddProduct = () => {
           <label className="text-sm font-medium">Brand</label>
           <input
             type="text"
-            {...register("brand", { required: "brand is required" })}
+            {...form.register("brand", { required: "brand is required" })}
             className={`border p-2 rounded-md ${
-              errors.brand ? "border-red-500" : "border-gray-300"
+              form.formState.errors.brand ? "border-red-500" : "border-gray-300"
             }`}
           />
-          {errors.brand && (
+          {form.formState.errors.brand && (
             <span className="text-red-500 text-sm">
-              {errors.brand.message?.toString()}
+              {form.formState.errors.brand.message?.toString()}
             </span>
           )}
         </div>
@@ -158,14 +144,14 @@ const AddProduct = () => {
           <label className="text-sm font-medium">Price</label>
           <input
             type="string"
-            {...register("price", { required: "Price is required" })}
+            {...form.register("price", { required: "Price is required" })}
             className={`border p-2 rounded-md ${
-              errors.price ? "border-red-500" : "border-gray-300"
+              form.formState.errors.price ? "border-red-500" : "border-gray-300"
             }`}
           />
-          {errors.price && (
+          {form.formState.errors.price && (
             <span className="text-red-500 text-sm">
-              {errors.price.message?.toString()}
+              {form.formState.errors.price.message?.toString()}
             </span>
           )}
         </div>
@@ -173,7 +159,7 @@ const AddProduct = () => {
           <label className="text-sm font-medium">Original Price</label>
           <input
             type="string"
-            {...register("originalPrice")}
+            {...form.register("originalPrice")}
             className={`border p-2 rounded-md `}
           />
         </div>
@@ -181,9 +167,11 @@ const AddProduct = () => {
           <label className="text-sm font-medium">Rating</label>
           <select
             id="rating"
-            {...register("rating", { required: "Rating is required" })}
+            {...form.register("rating", { required: "Rating is required" })}
             className={`p-2 rounded-md border ${
-              errors.rating ? "border-red-500" : "border-gray-300"
+              form.formState.errors.rating
+                ? "border-red-500"
+                : "border-gray-300"
             } bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500`}>
             <option value="">-- Choose Rating --</option>
             {[1, 2, 3, 4, 5].map((value) => (
@@ -192,9 +180,9 @@ const AddProduct = () => {
               </option>
             ))}
           </select>
-          {errors.rating && (
+          {form.formState.errors.rating && (
             <span className="text-red-500 text-sm">
-              {errors.rating.message?.toString()}
+              {form.formState.errors.rating.message?.toString()}
             </span>
           )}
         </div>
@@ -208,9 +196,11 @@ const AddProduct = () => {
               type="radio"
               id="inStockTrue"
               value="True"
-              {...register("inStock")}
+              {...form.register("inStock")}
               className={`border p-2 rounded-md ${
-                errors.inStock ? "border-red-500" : "border-gray-300"
+                form.formState.errors.inStock
+                  ? "border-red-500"
+                  : "border-gray-300"
               }`}
             />
             <label className="text-sm font-medium" htmlFor="inStockFalse">
@@ -220,16 +210,18 @@ const AddProduct = () => {
               type="radio"
               id="inStockFalse"
               value="false"
-              {...register("inStock")}
+              {...form.register("inStock")}
               className={`border p-2 rounded-md ${
-                errors.inStock ? "border-red-500" : "border-gray-300"
+                form.formState.errors.inStock
+                  ? "border-red-500"
+                  : "border-gray-300"
               }`}
             />
           </div>
 
-          {errors.inStock && (
+          {form.formState.errors.inStock && (
             <span className="text-red-500 text-sm">
-              {errors.inStock.message?.toString()}
+              {form.formState.errors.inStock.message?.toString()}
             </span>
           )}
         </div>
@@ -243,9 +235,13 @@ const AddProduct = () => {
               type="radio"
               id="isNewTrue"
               value="True"
-              {...register("isProductNew", { required: "isNew is required" })}
+              {...form.register("isProductNew", {
+                required: "isNew is required",
+              })}
               className={`border p-2 rounded-md ${
-                errors.isProductNew ? "border-red-500" : "border-gray-300"
+                form.formState.errors.isProductNew
+                  ? "border-red-500"
+                  : "border-gray-300"
               }`}
             />
             <label className="text-sm font-medium" htmlFor="isNewFalse">
@@ -255,15 +251,19 @@ const AddProduct = () => {
               type="radio"
               id="isNewFalse"
               value="false"
-              {...register("isProductNew", { required: "isNew is required" })}
+              {...form.register("isProductNew", {
+                required: "isNew is required",
+              })}
               className={`border p-2 rounded-md ${
-                errors.isProductNew ? "border-red-500" : "border-gray-300"
+                form.formState.errors.isProductNew
+                  ? "border-red-500"
+                  : "border-gray-300"
               }`}
             />
           </div>
-          {errors.isProductNew && (
+          {form.formState.errors.isProductNew && (
             <span className="text-red-500 text-sm">
-              {errors.isProductNew.message?.toString()}
+              {form.formState.errors.isProductNew.message?.toString()}
             </span>
           )}
         </div>
@@ -271,30 +271,34 @@ const AddProduct = () => {
           <label className="text-sm font-medium">Features</label>
           <input
             type="text"
-            {...register("features", { required: "Features is required" })}
+            {...form.register("features", { required: "Features is required" })}
             className={`border p-2 rounded-md ${
-              errors.features ? "border-red-500" : "border-gray-300"
+              form.formState.errors.features
+                ? "border-red-500"
+                : "border-gray-300"
             }`}
           />
-          {errors.features && (
+          {form.formState.errors.features && (
             <span className="text-red-500 text-sm">
-              {errors.features.message?.toString()}
+              {form.formState.errors.features.message?.toString()}
             </span>
           )}
         </div>
         <div className="flex flex-col space-y-4">
           <label className="text-sm font-medium">description</label>
           <textarea
-            {...register("description", {
+            {...form.register("description", {
               required: "description is required",
             })}
             className={`border p-2 rounded-md ${
-              errors.description ? "border-red-500" : "border-gray-300"
+              form.formState.errors.description
+                ? "border-red-500"
+                : "border-gray-300"
             }`}
           />
-          {errors.description && (
+          {form.formState.errors.description && (
             <span className="text-red-500 text-sm">
-              {errors.description.message?.toString()}
+              {form.formState.errors.description.message?.toString()}
             </span>
           )}
         </div>
@@ -302,14 +306,18 @@ const AddProduct = () => {
           <label className="text-sm font-medium">Specification</label>
           <input
             type="text"
-            {...register("specifications", { required: "brand is required" })}
+            {...form.register("specifications", {
+              required: "brand is required",
+            })}
             className={`border p-2 rounded-md ${
-              errors.specifications ? "border-red-500" : "border-gray-300"
+              form.formState.errors.specifications
+                ? "border-red-500"
+                : "border-gray-300"
             }`}
           />
-          {errors.specifications && (
+          {form.formState.errors.specifications && (
             <span className="text-red-500 text-sm">
-              {errors.specifications.message?.toString()}
+              {form.formState.errors.specifications.message?.toString()}
             </span>
           )}
         </div>

@@ -1,3 +1,4 @@
+"use client";
 import {
   Table,
   TableBody,
@@ -15,11 +16,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import BlogDialog from "../admin/blog/BlogDialog";
+import { Frown, Meh } from "react-feather";
+import Link from "next/link";
+import { useBlogStore } from "@/store/blog.store";
 
 type TableDemoProps = {
   header: string[];
   title: string;
-  data: Array<Record<string, string | number>>;
+  data: any[];
   footer?: string;
   action?: boolean;
 };
@@ -36,7 +41,7 @@ export function TableDemo({
   const queryClient = useQueryClient();
 
   const { mutate } = DeleteProduct();
-  const { mutate: blogDelete } = DeleteBlog();
+  const { mutate: blogDelete, isPending } = DeleteBlog();
 
   const handleProductDelete = (id: string) => {
     mutate(
@@ -52,18 +57,40 @@ export function TableDemo({
       }
     );
   };
+  const dailogClose = useBlogStore((state) => state.setDailogClose);
+  const dailogOpen = useBlogStore((state) => state.setDailogOpen);
 
   const handleBlogDelete = (id: string) => {
     blogDelete(id, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: [KEY.Blog] });
         toast.success("Blog deleted successfully");
+        dailogClose();
       },
       onError: (err) => {
         toast.error("Error deleting blog");
       },
     });
   };
+
+  if (data?.length === 0) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen space-y-2">
+        <Meh className=" text-amber-500 w-32 h-32" />
+        <h1 className="text-2xl font-bold">No Data Found !</h1>
+        <Link
+          href={
+            pathname?.startsWith("/admin")
+              ? "/admin/addblog"
+              : "/admin/addproduct"
+          }>
+          <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+            {pathname?.startsWith("/admin") ? "Add Blog" : "Add Product"}
+          </button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <Table className="scrollbar-hide">
@@ -80,6 +107,13 @@ export function TableDemo({
       </TableHeader>
       <TableBody>
         {data?.map((row, rowIndex) => {
+          if (row.length === 0) {
+            return (
+              <TableCaption key={rowIndex} className="text-left">
+                No Data Found
+              </TableCaption>
+            );
+          }
           return (
             <TableRow key={rowIndex} className="max-w-md overflow-hidden">
               {header.map((col, colIndex) => {
@@ -124,20 +158,20 @@ export function TableDemo({
                       className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
                       onClick={() => {
                         pathname?.includes("/blog")
-                          ? router.push(`/admin/addblog/${row._id}`)
+                          ? router.push(`/admin/editblog/${row._id}`)
                           : router.push(`/admin/addproduct/${row._id}`);
                       }}>
                       Edit
                     </button>
-                    <button
-                      className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer"
-                      onClick={() => {
-                        pathname?.includes("/blog")
-                          ? handleBlogDelete(String(row._id))
-                          : handleProductDelete(String(row._id));
-                      }}>
-                      Delete
-                    </button>
+                    <BlogDialog
+                      title="Delete Blog"
+                      btnText="Delete"
+                      description="Are you sure you want to delete this blog?"
+                      onClickEvent={() => {
+                        handleBlogDelete(row._id as string);
+                      }}
+                      submitText="Delete"
+                    />
                   </div>
                 </TableCell>
               )}

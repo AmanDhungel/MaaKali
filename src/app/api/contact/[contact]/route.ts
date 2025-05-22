@@ -1,4 +1,4 @@
-import Blog from "@/models/Blog";
+import Contact from "@/models/Contact";
 import { NextResponse } from "next/server";
 
 export async function DELETE(
@@ -7,7 +7,7 @@ export async function DELETE(
 ) {
   const { contact } = await params;
   try {
-    const res = await Blog.findByIdAndDelete(contact);
+    const res = await Contact.findByIdAndDelete(contact);
     return NextResponse.json({
       message: "Contact deleted successfully",
       data: res,
@@ -30,7 +30,7 @@ export async function PATCH(
   const body = await req.json();
   const { name, email, phonenumber, message } = body;
   try {
-    const res = await Blog.findByIdAndUpdate(contact, {
+    const res = await Contact.findByIdAndUpdate(contact, {
       name,
       email,
       phonenumber,

@@ -30,6 +30,15 @@ export const POST = async <T, R>(
   return response.data;
 };
 
+export const PATCH = async <T, R>(
+  url: string,
+  data: R,
+  config?: AxiosRequestConfig
+): Promise<T> => {
+  const response = await axios.patch<T>(`${BASE_URL}${url}`, data, config);
+  return response.data;
+};
+
 export const PUT = async <T, R>(
   url: string,
   data: R,
