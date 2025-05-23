@@ -7,7 +7,11 @@ export async function POST(request: Request) {
   await connectionDB();
   const parseBody = await request.json();
   const { email, password } = parseBody;
-
+  console.log(
+    "Refresh Token & Access Token",
+    process.env.NEXT_ACCESS_TOKEN_SECRET,
+    process.env.NEXT_REFRESH_TOKEN_SECRET
+  );
   if (
     !process.env.NEXT_ACCESS_TOKEN_SECRET ||
     !process.env.NEXT_REFRESH_TOKEN_SECRET

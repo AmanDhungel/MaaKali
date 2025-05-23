@@ -20,10 +20,6 @@ const EditBlog = () => {
     resolver: zodResolver(BlogFormType),
   });
 
-  console.log("Form Data", data);
-
-  //   console.log("Erro Form Data", error);
-
   useEffect(() => {
     if (data) {
       form.reset({
@@ -51,7 +47,6 @@ const EditBlog = () => {
         router.push("/admin/blog");
       },
       onError: (error) => {
-        console.log("Error", error);
         if (axios.isAxiosError(error) && error.response) {
           toast.error(error.response.data?.error || "Something went wrong");
         } else {

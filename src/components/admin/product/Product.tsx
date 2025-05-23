@@ -5,8 +5,6 @@ import React from "react";
 const Product = () => {
   const { data } = GETProducts();
 
-  console.log("data", data);
-
   const tableData = data?.map((product) => ({
     ...product,
     inStock: product.inStock ? "Yes" : "No",
