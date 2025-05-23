@@ -18,12 +18,8 @@ type formFields = {
 const LoginForm = () => {
   const router = useRouter();
   const { register, handleSubmit, setError } = useForm<formFields>();
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  // const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState("");
 
   interface LoginFormData {
     email: string;
@@ -64,20 +60,30 @@ const LoginForm = () => {
         router.push("/admin/blog");
         setIsLoading(false);
       }
-
-      console.log("Response:", response.data);
     } catch (error: AxiosError | any) {
-      console.log("Response:", error);
-      toast.error(error?.response?.data.error, {
-        position: "bottom-center",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data.error, {
+          position: "bottom-center",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else {
+        toast.error("Something went wrong", {
+          position: "bottom-center",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
       setIsLoading(false);
     }
 
@@ -88,7 +94,6 @@ const LoginForm = () => {
     //   password,
     //   rememberMe,
     // };
-    console.log("Form submitted:", data);
   };
 
   interface OAuthProvider {
@@ -96,7 +101,6 @@ const LoginForm = () => {
   }
 
   const handleOAuth = (provider: OAuthProvider["provider"]): void => {
-    console.log(`Logging in with ${provider}`);
     router.push(`/api/auth/${provider.toLowerCase()}`);
   };
 

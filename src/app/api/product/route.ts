@@ -54,7 +54,6 @@ export async function POST(request: Request) {
     await product.save();
     return new Response(JSON.stringify(product), { status: 201 });
   } catch (error) {
-    console.log("error error error", error);
     return new Response(
       JSON.stringify({ message: "Something went wrong", error }),
       {

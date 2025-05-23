@@ -8,6 +8,20 @@ export async function POST(request: Request) {
   const parseBody = await request.json();
   const { email, password } = parseBody;
 
+  if (
+    !process.env.NEXT_ACCESS_TOKEN_SECRET ||
+    !process.env.NEXT_REFRESH_TOKEN_SECRET
+  ) {
+    console.error("JWT secrets are not configured");
+    return new Response(
+      JSON.stringify({ message: "Server configuration error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+
   try {
     const emailExists = await User.findOne({ email });
     if (!emailExists) {
@@ -34,13 +48,13 @@ export async function POST(request: Request) {
 
     const accessToken = jwt.sign(
       { _id: emailExists._id },
-      process.env.ACCESS_TOKEN_SECRET!,
+      process.env.NEXT_ACCESS_TOKEN_SECRET,
       { expiresIn: "15m" }
     );
 
     const refreshToken = jwt.sign(
       { _id: emailExists._id },
-      process.env.REFRESH_TOKEN_SECRET!,
+      process.env.NEXT_REFRESH_TOKEN_SECRET,
       { expiresIn: "7d" }
     );
 
