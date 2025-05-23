@@ -37,15 +37,11 @@ const LoginForm = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/login",
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.post("/api/login", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       toast.success("Login successful", {
         position: "bottom-center",
         autoClose: 3000,
