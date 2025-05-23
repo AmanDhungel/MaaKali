@@ -7,7 +7,6 @@ export async function DELETE(
   { params }: { params: Promise<{ product: string }> }
 ) {
   const { product } = await params;
-  console.log("Product ID", product);
   try {
     await connectionDB();
     const deletedProduct = await Product.findByIdAndDelete(product);

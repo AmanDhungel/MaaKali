@@ -44,7 +44,6 @@ export const DeleteBlog = () => {
   return useMutation({
     mutationKey: [KEY.Blog],
     mutationFn: async (id: string) => {
-      console.log("Delete Blog ID", id);
       return await DELETE(`blog/${id}`);
     },
   });
