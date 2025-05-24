@@ -1,7 +1,3 @@
-import React from "react";
+import Message from "@/components/Message";
 
-const page = () => {
-  return <div>Message page</div>;
-};
-
-export default page;
+export default Message;
