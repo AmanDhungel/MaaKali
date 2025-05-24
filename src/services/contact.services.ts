@@ -47,7 +47,7 @@ const UpdateStatus = () => {
   return useMutation({
     mutationKey: [KEY.Contact],
 
-    mutationFn: (data: { id: string; status: string }) => {
+    mutationFn: (data: { id: string; checked: string }) => {
       return PATCH(`contact/${data.id}`, data);
     },
   });

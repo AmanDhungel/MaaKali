@@ -1,4 +1,4 @@
-import { DELETE, GET } from "@/helper/fetcher";
+import { DELETE, GET, POST } from "@/helper/fetcher";
 import { KEY } from "@/lib/Keys";
 import { ApiResponseType } from "@/types/ApiResponseType";
 import { ProductFormProps } from "@/types/product.types";
@@ -14,6 +14,16 @@ export const GETProducts = () => {
     queryKey: [KEY.Product],
     queryFn: () => {
       return GET("product");
+    },
+  });
+};
+
+export const AddProductData = () => {
+  return useMutation({
+    mutationKey: [KEY.Product],
+    mutationFn: (data) => {
+      console.log(data);
+      return POST(`product`, data);
     },
   });
 };

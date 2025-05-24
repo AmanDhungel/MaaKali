@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import { Sun, Moon, Menu, X } from "react-feather";
+import { Sun, Moon, Menu, X, ShoppingCart } from "react-feather";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -92,7 +92,7 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            {pathname?.startsWith("/admin") && (
+            {pathname?.startsWith("/admin") ? (
               <Button
                 onClick={handleLogout}
                 variant={"outline"}
@@ -100,6 +100,12 @@ const Navbar = () => {
                 {" "}
                 Logout
               </Button>
+            ) : (
+              <Link
+                className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-full transition-colors"
+                href="/cart">
+                <ShoppingCart className="h-5 w-5" />
+              </Link>
             )}
           </div>
 
