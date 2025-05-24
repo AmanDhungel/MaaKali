@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
     }
     const decoded = jwtVerify(
       token,
-      new TextEncoder().encode(process.env.ACCESS_TOKEN_SECRET!)
+      new TextEncoder().encode(process.env.NEXT_ACCESS_TOKEN_SECRET!)
     );
 
     if (!decoded) {

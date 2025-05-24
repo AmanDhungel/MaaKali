@@ -4,18 +4,17 @@ import { AddBlogPost } from "@/services/blog.services";
 import BlogForm from "./BlogForm";
 import { toast } from "react-toastify";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import axios from "axios";
 import { BlogFormType, BlogPostFormProps } from "@/types/blog.types";
 
 const AddBlog = () => {
-  const { mutate } = AddBlogPost();
+  const { mutate, isPending } = AddBlogPost();
   const form = useForm<BlogPostFormProps>({
     resolver: zodResolver(BlogFormType),
   });
   const onSubmit = async () => {
     const data = form.getValues();
-    console.log("Form Data", data);
     mutate(data, {
       onSuccess: () => {
         toast.success("Blog post added successfully!");
@@ -34,9 +33,10 @@ const AddBlog = () => {
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 w-11/12 m-auto p-4 border-2 rounded-md mt-10">
+        className="space-y-6 w-11/12 m-auto p-4 border-2 rounded-md mt-10 overflow-scroll mb-10">
         <BlogForm />
         <button
+          disabled={isPending}
           type="submit"
           className="flex cursor-pointer justify-center w-3/4 m-auto mt-4 bg-blue-500 text-white p-2 rounded-md">
           Submit Blog Post

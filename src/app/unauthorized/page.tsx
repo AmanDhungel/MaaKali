@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 const UnauthorizedPage = () => {
   const router = useRouter();
   const pathname = usePathname();
-  console.log("pathname", pathname);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center p-4 text-center">

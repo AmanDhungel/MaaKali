@@ -5,8 +5,9 @@ import { ShoppingCart, Heart, Star, Eye } from "react-feather";
 import { ProductFormProps } from "@/types/product.types";
 
 const ProductCard = ({ product }: { product: ProductFormProps }) => {
+  console.log("product", product);
   return (
-    <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+    <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all">
       <div className="relative">
         <img
           src={product.image}
@@ -14,20 +15,11 @@ const ProductCard = ({ product }: { product: ProductFormProps }) => {
           className="w-full h-48 md:h-56 object-cover"
         />
 
-        {product.isProductNew && (
+        {product.isProductNew.toLowerCase() === "true" && (
           <div className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-md">
             NEW
           </div>
         )}
-
-        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-          <button className="bg-white dark:bg-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-            <Eye className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-          </button>
-          <button className="bg-white dark:bg-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-            <Heart className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-          </button>
-        </div>
       </div>
 
       <div className="p-4">
@@ -69,7 +61,7 @@ const ProductCard = ({ product }: { product: ProductFormProps }) => {
             <span>Brand: {product.brand}</span>
             <span
               className={product.inStock ? "text-green-500" : "text-red-500"}>
-              {product.inStock ? "In Stock" : "Out of Stock"}
+              {product.inStock === "true" ? "In Stock" : "Out of Stock"}
             </span>
           </div>
         </div>

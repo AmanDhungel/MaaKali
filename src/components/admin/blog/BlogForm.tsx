@@ -14,7 +14,7 @@ import { Cross } from "lucide-react";
 import { Plus, Trash2 } from "react-feather";
 import { BlogPostFormProps } from "@/types/blog.types";
 
-const BlogForm = ({}) => {
+const BlogForm = () => {
   const [tagInput, setTagInput] = useState("");
   const [relatedPostInput, setRelatedPostInput] = useState("");
   const [state, setState] = useState({
@@ -80,7 +80,7 @@ const BlogForm = ({}) => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 w-full ">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 w-full overflow-scroll">
       <div className="flex flex-col space-y-4">
         <label className="text-sm font-medium">Title</label>
         <input

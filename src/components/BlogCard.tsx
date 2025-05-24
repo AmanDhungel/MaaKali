@@ -21,7 +21,6 @@ const BlogCard = ({ blogs }: { blogs: BlogPostFormProps[] }) => {
     );
   }
 
-  console.log(blogs);
   return (
     <>
       {blogs.map((blog) => (

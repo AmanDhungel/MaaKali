@@ -2,12 +2,15 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { Sun, Moon, Menu, X } from "react-feather";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button } from "./ui/button";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const [navLinks, setNavLinks] = useState([
     {
       name: "",
@@ -48,6 +51,12 @@ const Navbar = () => {
     }
   }, [pathname]);
 
+  const handleLogout = () => {
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
+    router.refresh();
+  };
+
   return (
     <nav className={`bg-white dark:bg-gray-900 shadow-md `}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -83,6 +92,15 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
+            {pathname?.startsWith("/admin") && (
+              <Button
+                onClick={handleLogout}
+                variant={"outline"}
+                className="text-red-500">
+                {" "}
+                Logout
+              </Button>
+            )}
           </div>
 
           <div className="md:hidden flex items-center">

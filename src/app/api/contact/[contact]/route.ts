@@ -21,31 +21,3 @@ export async function DELETE(
     });
   }
 }
-
-export async function PATCH(
-  req: Request,
-  { params }: { params: Promise<{ contact: string }> }
-) {
-  const { contact } = await params;
-  const body = await req.json();
-  const { name, email, phonenumber, message } = body;
-  try {
-    const res = await Contact.findByIdAndUpdate(contact, {
-      name,
-      email,
-      phonenumber,
-      message,
-    });
-    return NextResponse.json({
-      message: "Contact updated successfully",
-      data: res,
-      status: 200,
-    });
-  } catch (error) {
-    return NextResponse.json({
-      message: "Contact not updated",
-      data: null,
-      status: 500,
-    });
-  }
-}

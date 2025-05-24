@@ -86,22 +86,6 @@ const LoginForm = () => {
       }
       setIsLoading(false);
     }
-
-    // setError("");
-
-    // const formData: LoginFormData = {
-    //   email,
-    //   password,
-    //   rememberMe,
-    // };
-  };
-
-  interface OAuthProvider {
-    provider: string;
-  }
-
-  const handleOAuth = (provider: OAuthProvider["provider"]): void => {
-    router.push(`/api/auth/${provider.toLowerCase()}`);
   };
 
   return (
@@ -118,44 +102,6 @@ const LoginForm = () => {
 
         <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
           <div className="p-8">
-            {/* {error && (
-              <div className="mb-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-300 p-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )} */}
-
-            <div className="grid grid-cols-3 gap-3 mb-6">
-              <button
-                // onClick={() => handleOAuth("Google")}
-                className="flex items-center justify-center p-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                aria-label="Login with Google">
-                <FaGoogle className="h-5 w-5 text-red-500" />
-              </button>
-              <button
-                // onClick={() => handleOAuth("Facebook")}
-                className="flex items-center justify-center p-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                aria-label="Login with Facebook">
-                <Facebook className="h-5 w-5 text-blue-600" />
-              </button>
-              <button
-                // onClick={() => handleOAuth("Github")}
-                className="flex items-center justify-center p-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                aria-label="Login with GitHub">
-                <FaGithub className="h-5 w-5 text-gray-800 dark:text-gray-200" />
-              </button>
-            </div>
-
-            <div className="relative mb-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-                  OR CONTINUE WITH
-                </span>
-              </div>
-            </div>
-
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <div>
                 <label
