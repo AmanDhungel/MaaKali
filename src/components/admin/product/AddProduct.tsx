@@ -6,7 +6,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GETProducts } from "@/services/product.services";
+import { AddProductData, GETProducts } from "@/services/product.services";
 import ProductForm from "./ProductForm";
 import { ProductFormProps, ProductFormType } from "@/types/product.types";
 
@@ -15,22 +15,25 @@ const AddProduct = () => {
     resolver: zodResolver(ProductFormType),
   });
 
+  const { mutate } = AddProductData();
+
   const onSubmit = async (data: ProductFormProps) => {
-    try {
-      await axios.post("http://localhost:3000/api/product", data);
-      toast.success("", {
-        autoClose: 2000,
-        theme: "colored",
-      });
-      form.reset();
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        toast.warn(error.response.data?.error || "Something went wrong");
-      } else {
-        toast.warn("Something went wrong");
-      }
-    }
+    mutate(data as any, {
+      onSuccess: () => {
+        toast.success("Product added successfully!");
+        form.reset();
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error) && error.response) {
+          toast.error(error.response.data?.error || "Something went wrong");
+        } else {
+          toast.error("Something went wrong");
+        }
+      },
+    });
   };
+
+  console.log(form.getValues());
 
   return (
     <FormProvider {...form}>
