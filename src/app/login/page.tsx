@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Eye, EyeOff, Lock, Mail, Facebook } from "react-feather";
-import { FaGithub, FaGoogle } from "react-icons/fa";
+import { Eye, EyeOff, Lock, Mail } from "react-feather";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
