@@ -229,7 +229,7 @@ ESEWA_SECRET_KEY=your_secret_key
 
 ### 🔐 Authentication
 
-**POST** `/api/login`
+**Data** `/api/login`
 
 ```json
 {
@@ -264,32 +264,37 @@ ESEWA_SECRET_KEY=your_secret_key
   "comments": [],
   "createdAt": "2023-08-20T12:00:00Z"
 }
+```
 
-- /api/blog/:id
+**Data** `/api/blog/:id`
+
+```json
 {
-  "_id": "blog789",
-  "title": "New Hardware Tools",
-  "excerpt": "Discover our latest tools...",
-  "description": "Full article content...",
-  "comments": [
-    {
-      "name": "John Doe",
-      "email": "john@example.com",
-      "comment": "Great article!",
-      "date": "2023-08-21T10:00:00Z"
-    }
-  ],
-  "relatedPosts": ["blog123", "blog456"]
+"_id": "blog789",
+"title": "New Hardware Tools",
+"excerpt": "Discover our latest tools...",
+"description": "Full article content...",
+"comments": [
+{
+"name": "John Doe",
+"email": "john@example.com",
+"comment": "Great article!",
+"date": "2023-08-21T10:00:00Z"
+}
+],
+"relatedPosts": ["blog123", "blog456"]
 }
 
 {
-  "name": "Jane Smith",
-  "email": "jane@example.com",
-  "comment": "Very helpful!"
+"name": "Jane Smith",
+"email": "jane@example.com",
+"comment": "Very helpful!"
 }
+```
 
--/api/product
+**Data** `/api/product`
 
+```json
 {
   "id": "prod789",
   "name": "Professional Hammer",
@@ -309,31 +314,38 @@ ESEWA_SECRET_KEY=your_secret_key
   "name": "Professional Hammer",
   "price": 24.99
 }
+```
 
-- /api/product/:id
+**Data** `/api/product/:id`
 
+```json
 {
   "_id": "prod789",
   "name": "Professional Hammer",
   "specifications": "Weight: 1.2kg, Material: Steel",
   "relatedProducts": "prod123,prod456"
 }
+```
 
--/api/contact
+**Data** `/api/contact`
 
+```json
 {
-  "name": "John Doe",
-  "email": "john@example.com",
-  "phonenumber": "+9779812345678",
-  "message": "Do you have bulk discounts?"
+"name": "John Doe",
+"email": "john@example.com",
+"phonenumber": "+9779812345678",
+"message": "Do you have bulk discounts?"
 }
 
 {
-  "_id": "contact123",
-  "checked": "false"
+"_id": "contact123",
+"checked": "false"
 }
+```
 
-/api/contact/:id
+**Data** `/api/contact/:id`
+
+```json
 {
   "_id": "contact123",
   "checked": "true"
