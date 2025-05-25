@@ -3,7 +3,7 @@
 ![Project Banner](https://via.placeholder.com/1200x400?text=Maa+Kali+Hardware+CMS)  
 _A complete Content Management System for hardware e-commerce with blog capabilities_
 
-## 🌟 Table of Contents
+## Table of Contents
 
 - [Project Overview](#-project-overview)
 - [Key Features](#-key-features)
@@ -14,13 +14,8 @@ _A complete Content Management System for hardware e-commerce with blog capabili
   - [Running the Application](#running-the-application)
 - [Project Structure](#-project-structure)
 - [API Documentation](#-api-documentation)
-- [Authentication Flow](#-authentication-flow)
-- [Payment Integration](#-payment-integration)
-- [Image Management](#-image-management)
-- [State Management](#-state-management)
-- [Acknowledgements](#-acknowledgements)
 
-## 📌 Project Overview
+## Project Overview
 
 Maa Kali Hardware CMS is a full-featured content management system designed for hardware e-commerce businesses with:
 
@@ -30,7 +25,7 @@ Maa Kali Hardware CMS is a full-featured content management system designed for 
 - **Media Management**: Cloudinary integration for image uploads and delivery
 - **Scalable Architecture**: Modular codebase designed for future expansion
 
-## ✨ Key Features
+## Key Features
 
 ### Core Functionality
 
@@ -58,7 +53,50 @@ Maa Kali Hardware CMS is a full-featured content management system designed for 
   - Zustand for lightweight state management
   - Image optimization via Cloudinary
 
-## 🛠️ Technology Stack
+## Getting Started
+
+### Prerequisites
+
+- **MONGO DB SETUP & URI in the env field**
+- **Setup Cloudinary**
+- **All the required fields to be filled in the env file**
+
+### installation
+
+- Clone Repository or download zip file
+
+```bash
+git clone https://github.com/AmanDhungel/MaaKali.git
+```
+
+- Install all the dependencies
+
+```bash
+npm i
+```
+
+- Run the Application
+
+```bash
+npm run dev
+```
+
+### Env Setup
+
+-MONGO_URI= YOUR_MONGO_URI
+-NEXT_ACCESS_TOKEN_SECRET=YOUR_ACCESS_TOKEN_SECRET
+-NEXT_REFRESH_TOKEN_SECRET=YOUR_REFRESH_TOKEN_SECRET
+-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=YOUR_PUBLIC_CLOUDINARY_CLOUD_NAME
+-NEXT_PUBLIC_CLOUDINARY_API_KEY=YOUR_CLOUDINARY_API_KEY
+-CLOUDINARY_API_SECRET=YOUR_CLOUDINARY_API_SECRET
+
+### Run the Application
+
+```bash
+npm run dev
+```
+
+## Technology Stack
 
 ### Frontend
 
@@ -85,7 +123,7 @@ Maa Kali Hardware CMS is a full-featured content management system designed for 
 | ---------- | --------------- |
 | Prettier   | Code formatting |
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```mermaid
 graph TD
@@ -119,7 +157,7 @@ CLOUDINARY_API_SECRET=your_api_secret
 NEXT_PUBLIC_ESEWA_MERCHANT_ID=your_merchant_id
 ESEWA_SECRET_KEY=your_secret_key
 
-## ✨ Key Features
+## Key Features
 
 ### 🖥️ Content Management System
 
@@ -158,7 +196,7 @@ ESEWA_SECRET_KEY=your_secret_key
   - Order status tracking
   - Purchase history for users
 
-### 💬 Client Communication
+### Client Communication
 
 - **Contact System**
 
@@ -173,16 +211,145 @@ ESEWA_SECRET_KEY=your_secret_key
   - Customer communication history
   - Export message data
 
-### 🔐 Security Features
+### Security Features
 
 - JWT authentication for all CRUD operations
 - Role-based access control
 - CSRF protection
 - Data validation on all endpoints
 
-### 🚀 Performance Optimizations
+### Performance Optimizations
 
 - Image optimization via Cloudinary CDN
 - Tanstack Query for efficient data fetching
 - Zustand for lightweight state management
 - Code-splitting for faster page loads
+
+## 📡 API Documentation
+
+### 🔐 Authentication
+
+**POST** `/api/login`
+
+```json
+{
+  "email": "user@example.com",
+  "password": "securePassword123"
+}
+
+{
+  "user": {
+    "_id": "user123",
+    "username": "admin",
+    "email": "admin@maakali.com",
+    "image": "https://cloudinary.com/user123.jpg"
+  },
+  "accessToken": "eyJhbGciOi...",
+  "refreshToken": "eyJhbGciOi..."
+}
+
+{
+  "title": "New Hardware Tools",
+  "excerpt": "Discover our latest tools...",
+  "description": "Full article content...",
+  "author": "Admin User",
+  "tags": ["tools", "hardware"],
+  "image": "cloudinary_image_id",
+  "relatedPosts": ["blog123", "blog456"]
+}
+
+{
+  "_id": "blog789",
+  "title": "New Hardware Tools",
+  "comments": [],
+  "createdAt": "2023-08-20T12:00:00Z"
+}
+
+- /api/blog/:id
+{
+  "_id": "blog789",
+  "title": "New Hardware Tools",
+  "excerpt": "Discover our latest tools...",
+  "description": "Full article content...",
+  "comments": [
+    {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "comment": "Great article!",
+      "date": "2023-08-21T10:00:00Z"
+    }
+  ],
+  "relatedPosts": ["blog123", "blog456"]
+}
+
+{
+  "name": "Jane Smith",
+  "email": "jane@example.com",
+  "comment": "Very helpful!"
+}
+
+-/api/product
+
+{
+  "id": "prod789",
+  "name": "Professional Hammer",
+  "category": "Hand Tools",
+  "brand": "Maa Kali",
+  "price": 24.99,
+  "originalPrice": 29.99,
+  "rating": "4.8",
+  "inStock": "true",
+  "isProductNew": "true",
+  "features": ["Ergonomic handle", "Anti-slip grip"],
+  "image": "cloudinary_image_id"
+}
+
+{
+  "_id": "prod789",
+  "name": "Professional Hammer",
+  "price": 24.99
+}
+
+- /api/product/:id
+
+{
+  "_id": "prod789",
+  "name": "Professional Hammer",
+  "specifications": "Weight: 1.2kg, Material: Steel",
+  "relatedProducts": "prod123,prod456"
+}
+
+-/api/contact
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phonenumber": "+9779812345678",
+  "message": "Do you have bulk discounts?"
+}
+
+{
+  "_id": "contact123",
+  "checked": "false"
+}
+
+/api/contact/:id
+{
+  "_id": "contact123",
+  "checked": "true"
+}
+```
+
+### Protected Routes
+
+- path: ['/admin/:path*']
+- this means routes that contains /admin will go throught middleware check and will be protected.
+
+### Key improvements from your models:
+
+1. Added comment functionality to blogs
+2. Included product specifications and features
+3. Added contact message status updates
+4. Included user registration endpoint
+5. Added proper image handling for all models
+6. Included related products/posts relationships
