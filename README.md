@@ -1,6 +1,6 @@
 # Maa Kali Hardware - Enterprise CMS Solution
 
-![Project Banner](https://via.placeholder.com/1200x400?text=Maa+Kali+Hardware+CMS)  
+![Project Banner](https://raw.githubusercontent.com/AmanDhungel/MaaKali/refs/heads/main/public/hardware1.webp)  
 _A complete Content Management System for hardware e-commerce with blog capabilities_
 
 ## Table of Contents
