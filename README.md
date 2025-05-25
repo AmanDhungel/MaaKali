@@ -247,7 +247,11 @@ ESEWA_SECRET_KEY=your_secret_key
   "accessToken": "eyJhbGciOi...",
   "refreshToken": "eyJhbGciOi..."
 }
+```
 
+**Data** `/api/blog`
+
+```json
 {
   "title": "New Hardware Tools",
   "excerpt": "Discover our latest tools...",
