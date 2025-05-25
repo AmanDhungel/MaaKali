@@ -4,7 +4,6 @@ import { TableDemo } from "@/components/ui/dynamicTable";
 import { GETBlogs } from "@/services/blog.services";
 import { Loader } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 
 const BlogPostForm = () => {
   const { data, isLoading } = GETBlogs();

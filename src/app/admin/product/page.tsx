@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import Product from "@/components/admin/product/Product";
 

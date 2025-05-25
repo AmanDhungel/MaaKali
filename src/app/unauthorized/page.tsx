@@ -1,5 +1,5 @@
 "use client";
-import { Lock, ArrowRight, Home, HelpCircle } from "react-feather";
+import { Lock, ArrowRight, Home } from "react-feather";
 import { FaContao } from "react-icons/fa";
 import { usePathname, useRouter } from "next/navigation";
 
