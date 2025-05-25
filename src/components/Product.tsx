@@ -1,11 +1,14 @@
 "use client";
 import { GETProducts } from "@/services/product.services";
 import { Loader2 } from "lucide-react";
-import { ShoppingCart, Heart, Star, Eye } from "react-feather";
+import { ShoppingCart, Star } from "react-feather";
 import { ProductFormProps } from "@/types/product.types";
+import { useProductStore } from "@/store/product.store";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ product }: { product: ProductFormProps }) => {
-  console.log("product", product);
+  const addToCart = useProductStore((state) => state.addToCart);
+
   return (
     <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all">
       <div className="relative">
@@ -50,8 +53,18 @@ const ProductCard = ({ product }: { product: ProductFormProps }) => {
               </span>
             )}
           </div>
-
-          <button className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-full transition-colors">
+          <button
+            className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-full transition-colors"
+            onClick={() => {
+              addToCart(product);
+              toast.success("Product added to cart!", {
+                position: "bottom-center",
+                autoClose: 1000,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "dark",
+              });
+            }}>
             <ShoppingCart className="h-5 w-5" />
           </button>
         </div>

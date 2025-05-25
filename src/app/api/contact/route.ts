@@ -1,14 +1,12 @@
+import connectionDB from "@/connectDB/connectionDB";
 import Contact from "@/models/Contact";
 import { NextResponse } from "next/server";
 
 export async function GET() {
+  await connectionDB();
   try {
     const res = await Contact.find();
-    return NextResponse.json({
-      message: "Contact fetched successfully",
-      data: res,
-      status: 200,
-    });
+    return new Response(JSON.stringify(res), { status: 200 });
   } catch (error) {
     return NextResponse.json({
       message: "Contact not fetched",
@@ -20,6 +18,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  await connectionDB();
   const body = await req.json();
   const { name, email, phonenumber, message } = body;
   try {
