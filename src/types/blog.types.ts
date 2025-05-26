@@ -1,19 +1,5 @@
 import { z } from "zod";
 
-// interface BlogPropsType {
-//   _id?: string;
-//   id?: string;
-//   title: string;
-//   excerpt: string;
-//   image: string;
-//   category: string;
-//   createdAt: string;
-//   description: string;
-//   author: string;
-//   readTime: number;
-//   url: string;
-// }
-
 export const BlogFormType = z.object({
   id: z.string().optional(),
   _id: z.string().optional(),
