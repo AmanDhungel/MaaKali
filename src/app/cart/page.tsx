@@ -1,5 +1,6 @@
 "use client";
 import { useProductStore } from "@/store/product.store";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 type CartItem = {
@@ -20,27 +21,8 @@ type CartItem = {
   quantity: number;
 };
 
-const mockCartItems: CartItem[] = [
-  {
-    _id: "1",
-    image: "/placeholder.png",
-    name: "Sample Product",
-    category: "Electronics",
-    brand: "BrandX",
-    price: "199.99",
-    originalPrice: "249.99",
-    rating: "4",
-    inStock: "Yes",
-    isProductNew: "Yes",
-    features: "Feature 1, Feature 2",
-    description: "A great product.",
-    specifications: "Spec 1, Spec 2",
-    relatedProducts: ["2", "3"],
-    quantity: 1,
-  },
-];
-
 const CartPage: React.FC = () => {
+  const router = useRouter();
   const { cart: cartItems, updateQuantity, removeFromCart } = useProductStore();
   const [quantities, setQuantities] = useState<Record<string, number>>(() => {
     const initialQuantities: Record<string, number> = {};
@@ -71,6 +53,7 @@ const CartPage: React.FC = () => {
       return total + Number(item.price) * itemQuantity;
     }, 0);
   };
+
   return (
     <div className="max-w-4xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
@@ -147,7 +130,9 @@ const CartPage: React.FC = () => {
               {calculateTotal().toFixed(2)}
             </span>
           </div>
-          <button className="w-full bg-blue-600 text-white py-2 rounded mt-4 hover:bg-blue-700 transition">
+          <button
+            onClick={() => router.push("/checkout")}
+            className="w-full bg-blue-600 text-white py-2 rounded mt-4 hover:bg-blue-700 transition">
             Proceed to Checkout
           </button>
         </div>

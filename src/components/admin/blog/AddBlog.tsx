@@ -30,19 +30,21 @@ const AddBlog = () => {
     });
   };
   return (
-    <FormProvider {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 w-11/12 m-auto p-4 border-2 rounded-md mt-10 overflow-scroll mb-10">
-        <BlogForm />
-        <button
-          disabled={isPending}
-          type="submit"
-          className="flex cursor-pointer justify-center w-3/4 m-auto mt-4 bg-blue-500 text-white p-2 rounded-md">
-          Submit Blog Post
-        </button>
-      </form>
-    </FormProvider>
+    <div className="overflow-y-auto min-h-max">
+      <FormProvider {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-6 w-11/12 m-auto p-4 border-2 rounded-md mt-10 overflow-scroll mb-10 overflow-y-auto max-h-screen">
+          <BlogForm />
+          <button
+            disabled={isPending}
+            type="submit"
+            className="flex cursor-pointer justify-center w-3/4 m-auto mt-4 bg-blue-500 text-white p-2 rounded-md mb-20">
+            Submit Blog Post
+          </button>
+        </form>
+      </FormProvider>
+    </div>
   );
 };
 

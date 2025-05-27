@@ -2,14 +2,7 @@
 import { GETBlogs } from "@/services/blog.services";
 import { BlogPostFormProps } from "@/types/blog.types";
 import Image from "next/image";
-import {
-  Calendar,
-  Clock,
-  User,
-  ArrowRight,
-  Loader,
-  Smile,
-} from "react-feather";
+import { Calendar, User, ArrowRight, Loader, Smile } from "react-feather";
 
 const BlogCard = ({ blogs }: { blogs: BlogPostFormProps[] }) => {
   if (!blogs || blogs.length === 0) {

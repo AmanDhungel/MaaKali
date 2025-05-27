@@ -161,7 +161,7 @@ ESEWA_SECRET_KEY=your_secret_key
 
 ## Key Features
 
-### 🖥️ Content Management System
+### Content Management System
 
 - **Blog Management**
 
@@ -183,7 +183,7 @@ ESEWA_SECRET_KEY=your_secret_key
   - Admin response system
   - Message archiving
 
-### 🛒 E-Commerce Functionality
+### E-Commerce Functionality
 
 - **Shopping Cart System**
 
@@ -227,9 +227,9 @@ ESEWA_SECRET_KEY=your_secret_key
 - Zustand for lightweight state management
 - Code-splitting for faster page loads
 
-## 📡 API Documentation
+## API Documentation
 
-### 🔐 Authentication
+### Authentication
 
 **Data** `/api/login`
 

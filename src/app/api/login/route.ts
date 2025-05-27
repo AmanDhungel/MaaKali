@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     const accessToken = jwt.sign(
       { _id: emailExists._id },
       process.env.NEXT_ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" }
+      { expiresIn: "2m" }
     );
 
     const refreshToken = jwt.sign(

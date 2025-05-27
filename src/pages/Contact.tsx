@@ -4,6 +4,8 @@ import { MapPin, Phone, Mail, Clock, MessageSquare } from "react-feather";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ContactFormProps, ContactFormType } from "@/types/contact.types";
+import { zodResolver } from "@hookform/resolvers/zod";
 const queryClient = new QueryClient();
 
 const ContactUsSectionContent = () => {
@@ -12,13 +14,8 @@ const ContactUsSectionContent = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      message: "",
-    },
+  } = useForm<ContactFormProps>({
+    resolver: zodResolver(ContactFormType),
   });
 
   const { mutate } = PostContact();
@@ -154,7 +151,6 @@ const ContactUsSectionContent = () => {
                   type="text"
                   id="name"
                   {...register("name", { required: true })}
-                  required
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:text-white"
                 />
                 {errors.name && (
@@ -171,7 +167,6 @@ const ContactUsSectionContent = () => {
                   type="email"
                   id="email"
                   {...register("email", { required: true })}
-                  required
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:text-white"
                 />
                 {errors.email && (
@@ -194,7 +189,7 @@ const ContactUsSectionContent = () => {
                 />
                 {errors.phone && (
                   <span className="text-red-500 text-sm">
-                    Phone Number is required
+                    {errors.phone.message}
                   </span>
                 )}
               </div>
@@ -207,7 +202,6 @@ const ContactUsSectionContent = () => {
                 <textarea
                   id="message"
                   {...register("message", { required: true })}
-                  required
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 dark:bg-gray-700 dark:text-white"></textarea>
                 {errors.message && (
                   <span className="text-red-500 text-sm">
