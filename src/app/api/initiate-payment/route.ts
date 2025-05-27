@@ -6,7 +6,7 @@ function validateEnvironmentVariables() {
   const requiredEnvVars = [
     "NEXT_PUBLIC_BASE_URL",
     "NEXT_PUBLIC_ESEWA_MERCHANT_CODE",
-    "NEXT_PUBLIC_ESEWA_SECRET_KEY",
+    "NEXT_ESEWA_SECRET_KEY",
   ];
   for (const envVar of requiredEnvVars) {
     if (!process.env[envVar]) {
