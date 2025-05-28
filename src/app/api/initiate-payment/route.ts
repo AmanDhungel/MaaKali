@@ -1,10 +1,9 @@
 "use server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { generateEsewaSignature } from "@/lib/generateEsewaSignature";
 function validateEnvironmentVariables() {
   const requiredEnvVars = [
-    "NEXT_PUBLIC_BASE_URL",
     "NEXT_PUBLIC_ESEWA_MERCHANT_CODE",
     "NEXT_ESEWA_SECRET_KEY",
   ];
@@ -14,7 +13,8 @@ function validateEnvironmentVariables() {
     }
   }
 }
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const origin = req.nextUrl.origin;
   try {
     validateEnvironmentVariables();
     const paymentData: any = await req.json();
@@ -38,8 +38,8 @@ export async function POST(req: Request) {
           product_code: process.env.NEXT_PUBLIC_ESEWA_MERCHANT_CODE,
           product_service_charge: "0",
           product_delivery_charge: "0",
-          success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?method=esewa`,
-          failure_url: `${process.env.NEXT_PUBLIC_BASE_URL}`,
+          success_url: `${origin}`,
+          failure_url: `${origin}`,
           signed_field_names: "total_amount,transaction_uuid,product_code",
         };
         const signatureString = `total_amount=${esewaConfig.total_amount},transaction_uuid=${esewaConfig.transaction_uuid},product_code=${esewaConfig.product_code}`;

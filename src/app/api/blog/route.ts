@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import connectionDB from "@/connectDB/connectionDB.js";
 import Blog from "@/models/Blog";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     await connectionDB();
     const blog = await Blog.find();

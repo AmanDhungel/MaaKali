@@ -1,6 +1,6 @@
 "use client";
 import { useProductStore } from "@/store/product.store";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 type CartItem = {
