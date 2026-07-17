@@ -3,6 +3,10 @@ import Reveal from "@/components/Reveal";
 const HeroSection = () => {
   return (
     <section className="relative bg-ink text-white overflow-hidden">
+      <meta
+        name="google-site-verification"
+        content="tPlILGAwGX1YB35OmXuWBvgiBiI6p-FZka76KGv7UBo"
+      />
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div
           className="absolute -top-[15%] -left-[5%] w-[55vw] h-[55vw] blur-[60px]"
@@ -52,17 +56,14 @@ const HeroSection = () => {
 
       <div className="relative z-[2] max-w-[1320px] mx-auto px-[6vw] pt-20 pb-24 grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-14 items-center">
         <div>
-          <Reveal
-            className="inline-flex items-center gap-2.5 font-accent text-xs tracking-[.18em] text-mint border border-mint/35 px-3.5 py-2 mb-7"
-          >
+          <Reveal className="inline-flex items-center gap-2.5 font-accent text-xs tracking-[.18em] text-mint border border-mint/35 px-3.5 py-2 mb-7">
             <span className="w-[7px] h-[7px] bg-mint rounded-full" />
             HARDWARE · MATERIALS · HOME SERVICES — NEPAL
           </Reveal>
           <Reveal
             as="h1"
             index={1}
-            className="font-black tracking-[-.02em] leading-[.98] mb-6 text-[clamp(40px,6vw,82px)]"
-          >
+            className="font-black tracking-[-.02em] leading-[.98] mb-6 text-[clamp(40px,6vw,82px)]">
             Everything to{" "}
             <span
               className="bg-clip-text text-transparent"
@@ -71,8 +72,7 @@ const HeroSection = () => {
                   "linear-gradient(90deg, #2FBE7E, #7fd1ff, #2FBE7E, #7fd1ff)",
                 backgroundSize: "200% auto",
                 animation: "shine 6s linear infinite",
-              }}
-            >
+              }}>
               build, fix &amp; finish
             </span>{" "}
             your home.
@@ -80,24 +80,21 @@ const HeroSection = () => {
           <Reveal
             as="p"
             index={2}
-            className="text-white/74 max-w-[560px] mb-9 leading-relaxed text-[clamp(16px,1.5vw,19px)]"
-          >
-            Maa Kali Hardware is your one-stop hardware store and
-            home-solutions partner in Bhaktapur, Nepal — quality construction
-            materials, plumbing, paints, tools and tiles, plus expert
-            installation services for your whole house.
+            className="text-white/74 max-w-[560px] mb-9 leading-relaxed text-[clamp(16px,1.5vw,19px)]">
+            Maa Kali Hardware is your one-stop hardware store and home-solutions
+            partner in Bhaktapur, Nepal — quality construction materials,
+            plumbing, paints, tools and tiles, plus expert installation services
+            for your whole house.
           </Reveal>
           <Reveal index={3} className="flex gap-3.5 flex-wrap mb-12">
             <a
               href="/product"
-              className="bg-forest hover:bg-mint hover:text-ink text-white font-bold text-[15.5px] px-7 py-[17px] inline-flex items-center gap-2.5 transition-all hover:-translate-y-0.5"
-            >
+              className="bg-forest hover:bg-mint hover:text-ink text-white font-bold text-[15.5px] px-7 py-[17px] inline-flex items-center gap-2.5 transition-all hover:-translate-y-0.5">
               Explore Products →
             </a>
             <a
               href="/services"
-              className="border border-white/28 hover:border-mint hover:bg-mint/10 text-white font-bold text-[15.5px] px-7 py-[17px] inline-flex items-center gap-2.5 transition-colors"
-            >
+              className="border border-white/28 hover:border-mint hover:bg-mint/10 text-white font-bold text-[15.5px] px-7 py-[17px] inline-flex items-center gap-2.5 transition-colors">
               Our Services
             </a>
           </Reveal>
@@ -136,8 +133,7 @@ const HeroSection = () => {
           </div>
           <div
             className="absolute -bottom-6 -left-6 bg-white text-ink px-6 py-5 shadow-2xl"
-            style={{ animation: "floaty 6s ease-in-out infinite" }}
-          >
+            style={{ animation: "floaty 6s ease-in-out infinite" }}>
             <div className="font-accent text-[10px] tracking-[.16em] text-forest">
               FAMILY RUN
             </div>
