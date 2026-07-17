@@ -10,13 +10,13 @@ export default defineConfig([
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], languageOptions: { globals: globals.browser } },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
+  pluginReact.configs.flat["jsx-runtime"],
   {
     rules: {
       "react/jsx-filename-extension": ["error", { extensions: [".jsx", ".tsx"] }],
       "react/prop-types": "off",
       "react/no-unescaped-entities": "off",
       "no-unused-vars": "warn",
-      "no-unused-const": "warn",
       "no-undef": "warn",
       "prefer-const": "warn",
       "no-unused-expressions": [
@@ -49,7 +49,7 @@ export default defineConfig([
       "no-multi-assign": [
         "error",
         {
-          ignoreDestructuring: false,
+          ignoreNonDeclaration: false,
         },
       ],
       "no-new-func": "error",
