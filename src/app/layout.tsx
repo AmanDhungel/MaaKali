@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Archivo, Space_Mono } from "next/font/google";
+// @ts-expect-error: CSS side-effect import declaration is handled by Next.js
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
