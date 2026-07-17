@@ -1,12 +1,9 @@
 import Reveal from "@/components/Reveal";
+import Image from "next/image";
 
 const HeroSection = () => {
   return (
     <section className="relative bg-ink text-white overflow-hidden">
-      <meta
-        name="google-site-verification"
-        content="tPlILGAwGX1YB35OmXuWBvgiBiI6p-FZka76KGv7UBo"
-      />
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div
           className="absolute -top-[15%] -left-[5%] w-[55vw] h-[55vw] blur-[60px]"
@@ -124,12 +121,20 @@ const HeroSection = () => {
 
         <Reveal index={2} className="relative hidden lg:block">
           <div className="relative aspect-[4/5] bg-ink-2 border border-white/14 flex items-center justify-center [background-image:repeating-linear-gradient(135deg,rgba(47,190,126,.10)_0_14px,transparent_14px_28px)]">
-            <span className="font-accent text-[13px] tracking-[.1em] text-mint uppercase">
+            {/* <span className="font-accent text-[13px] tracking-[.1em] text-mint uppercase">
               [ storefront / team photo ]
             </span>
             <span className="absolute top-3.5 left-3.5 font-accent text-[10px] tracking-[.14em] text-white/40">
               FIG.01 — MAA KALI HARDWARE, BHAKTAPUR
-            </span>
+            </span> */}
+            <Image
+              src={"/storeupfront.png"}
+              className="object-cover w-full h-full"
+              priority
+              alt="Maa Kali Hardware storefront – best hardware store in Bhaktapur, Kathmandu Valley"
+              width={4000}
+              height={4000}
+            />
           </div>
           <div
             className="absolute -bottom-6 -left-6 bg-white text-ink px-6 py-5 shadow-2xl"

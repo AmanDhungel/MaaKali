@@ -1,124 +1,93 @@
-"use client";
-import { GETSingleBlog } from "@/services/blog.services";
-import Image from "next/image";
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
-import {
-  Calendar,
-  User,
-  ArrowLeft,
-  Loader,
-  Facebook,
-  Twitter,
-} from "react-feather";
+import type { Metadata } from "next";
+import connectionDB from "@/connectDB/connectionDB";
+import Blog from "@/models/Blog";
+import BlogDetailClient from "@/components/blog/BlogDetailClient";
+import { buildKeywords, CORE_KEYWORDS, SITE_URL } from "@/lib/seo";
 
-const SingleBlogPage = () => {
-  const param = useParams();
-  const pathname = usePathname();
-  const { data, isLoading } = GETSingleBlog(param?.blog as string);
+interface RawBlog {
+  _id: string;
+  title: string;
+  excerpt: string;
+  description?: string;
+  author: string;
+  tags: string[];
+  image: string;
+  createdAt?: string;
+}
 
-  if (isLoading) {
-    return (
-      <div className="bg-offwhite min-h-screen flex items-center justify-center">
-        <Loader className="h-8 w-8 animate-spin text-forest" />
-      </div>
-    );
+async function getBlog(id: string): Promise<RawBlog | null> {
+  try {
+    await connectionDB();
+    const blog = await Blog.findById(id).lean();
+    return blog ? JSON.parse(JSON.stringify(blog)) : null;
+  } catch {
+    return null;
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ blog: string }>;
+}): Promise<Metadata> {
+  const { blog: id } = await params;
+  const blog = await getBlog(id);
+  if (!blog) return { title: "Blog | Maa Kali Hardware" };
+
+  return {
+    title: blog.title,
+    description: blog.excerpt,
+    keywords: buildKeywords(CORE_KEYWORDS, blog.tags, [blog.title]),
+    alternates: { canonical: `/blog/${id}` },
+    openGraph: {
+      type: "article",
+      title: blog.title,
+      description: blog.excerpt,
+      url: `/blog/${id}`,
+      images: blog.image ? [{ url: blog.image }] : undefined,
+      authors: [blog.author],
+      tags: blog.tags,
+    },
+  };
+}
+
+export default async function SingleBlogPage({
+  params,
+}: {
+  params: Promise<{ blog: string }>;
+}) {
+  const { blog: id } = await params;
+  const blog = await getBlog(id);
+
+  const jsonLd = blog
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: blog.title,
+        description: blog.excerpt,
+        image: blog.image,
+        author: { "@type": "Person", name: blog.author },
+        publisher: {
+          "@type": "Organization",
+          name: "Maa Kali Hardware",
+          logo: { "@type": "ImageObject", url: `${SITE_URL}/dh.png` },
+        },
+        datePublished: blog.createdAt,
+        mainEntityOfPage: `${SITE_URL}/blog/${id}`,
+        keywords: blog.tags?.join(", "),
+      }
+    : null;
 
   return (
-    <div className="bg-offwhite min-h-screen">
-      <div className="border-b border-border-light px-[6vw] py-4">
-        <div className="max-w-[820px] mx-auto">
-          <Link
-            href="/blog"
-            className="inline-flex items-center text-forest hover:text-mint font-semibold text-sm transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4 mr-1.5" />
-            Back to Blog
-          </Link>
-        </div>
-      </div>
-
-      <main className="max-w-[820px] mx-auto px-[6vw] py-14">
-        <header className="mb-9">
-          <span className="inline-block font-accent text-[11px] tracking-[.12em] text-forest border border-forest/40 px-3 py-1.5 mb-5">
-            MAA KALI HARDWARE
-          </span>
-          <h1 className="text-[32px] md:text-[44px] font-black tracking-[-.02em] leading-[1.05] mb-5">
-            {data?.title}
-          </h1>
-
-          <div className="flex flex-wrap items-center gap-5 font-accent text-xs tracking-[.05em] text-body-muted mb-8">
-            <span className="flex items-center">
-              <User className="h-3.5 w-3.5 mr-2" />
-              {data?.author}
-            </span>
-            <span className="flex items-center">
-              <Calendar className="h-3.5 w-3.5 mr-2" />
-              {new Date(data?.createdAt ? data?.createdAt : "").toDateString()}
-            </span>
-          </div>
-
-          {data?.image && (
-            <div className="border border-border-light overflow-hidden mb-8">
-              <Image
-                width={820}
-                height={460}
-                src={data.image}
-                alt={data.title ?? ""}
-                className="w-full h-auto object-cover"
-              />
-            </div>
-          )}
-        </header>
-
-        <article className="prose max-w-none prose-headings:font-black prose-a:text-forest">
-          <div dangerouslySetInnerHTML={{ __html: data?.description || "" }} />
-
-          {!!data?.tags?.length && (
-            <div className="mt-12 flex flex-wrap gap-2 not-prose">
-              {data.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="bg-white border border-border-light text-ink text-sm px-3 py-1.5"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
-        </article>
-
-        <div className="flex flex-wrap justify-between items-center mt-12 pt-6 border-t border-border-light">
-          <span className="font-accent text-xs tracking-[.1em] text-body-muted">
-            SHARE THIS ARTICLE
-          </span>
-          <div className="flex gap-3">
-            <Link
-              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                `https://maa-kali.vercel.app${pathname}`
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-9 h-9 flex items-center justify-center border border-border-light hover:border-forest hover:text-forest transition-colors"
-            >
-              <Facebook className="h-4 w-4" />
-            </Link>
-            <Link
-              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                `https://maa-kali.vercel.app${pathname}`
-              )}&text=${encodeURIComponent("Check this out!")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-9 h-9 flex items-center justify-center border border-border-light hover:border-forest hover:text-forest transition-colors"
-            >
-              <Twitter className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </main>
-    </div>
+    <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+      <BlogDetailClient />
+    </>
   );
-};
-
-export default SingleBlogPage;
+}

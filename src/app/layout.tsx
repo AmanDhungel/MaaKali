@@ -3,8 +3,16 @@ import { Geist, Geist_Mono, Archivo, Space_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import StructuredData from "@/components/StructuredData";
 import { ToastContainer } from "react-toastify";
 import TanStackQuery from "@/context/TanStackQuery";
+import {
+  BUSINESS,
+  CORE_KEYWORDS,
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,9 +37,57 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Maa Kali Hardware Shop in Bhaktapur | Radhe Radhe Hardware",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default:
+      "Maa Kali Hardware | Best Hardware Store in Bhaktapur, Kathmandu Valley",
+    template: `%s | ${SITE_NAME}`,
+  },
   description:
-    "Hardware located on the main road in Bhaktapur, Radhe Radhe. Maa kali Hardware is your one-stop solution for all home improvement needs in Bhaktapur. We offer a wide range of products including plumbing, paints, tools, and more. Visit us for quality service and genuine products.",
+    "Maa Kali Hardware & Home Solutions is the best hardware store in Bhaktapur, serving the whole Kathmandu Valley since 1998. Find a trusted plumber, electrician and construction company near you, plus 12,000+ genuine hardware, plumbing, electrical, paint and construction products.",
+  keywords: CORE_KEYWORDS,
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME }],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title:
+      "Maa Kali Hardware | Best Hardware Store in Bhaktapur, Kathmandu Valley",
+    description:
+      "Trusted hardware store, plumber, electrician and construction company in Bhaktapur & the Kathmandu Valley since 1998. 12,000+ genuine products plus expert home services.",
+    images: [
+      { url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: SITE_NAME },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title:
+      "Maa Kali Hardware | Best Hardware Store in Bhaktapur, Kathmandu Valley",
+    description:
+      "Trusted hardware store, plumber, electrician and construction company in Bhaktapur & the Kathmandu Valley since 1998.",
+    images: [DEFAULT_OG_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
+  },
+  verification: {
+    google: "tPlILGAwGX1YB35OmXuWBvgiBiI6p-FZka76KGv7UBo",
+  },
+  other: {
+    "geo.placename": BUSINESS.addressLocality,
+    "geo.region": "NP",
+  },
 };
 
 export default function RootLayout({
@@ -41,6 +97,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <StructuredData />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${archivo.variable} ${spaceMono.variable} antialiased`}>
         <TanStackQuery>

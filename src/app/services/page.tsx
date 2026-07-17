@@ -2,11 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { services } from "@/data/services";
 import Reveal from "@/components/Reveal";
+import { buildKeywords, CORE_KEYWORDS } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Services | Maa Kali Hardware",
+  title: "Home Services in Bhaktapur & Kathmandu Valley",
   description:
-    "Complete home solutions in Nepal — construction, plumbing, electrical, painting, tiling, modular kitchens, false ceiling and more, delivered by our own skilled teams.",
+    "Trusted plumber, electrician and construction company services in Bhaktapur & the Kathmandu Valley — room addition, house repairing, full house construction, renovation, painting, modular kitchens, false ceiling and more, delivered by our own skilled teams.",
+  keywords: buildKeywords(
+    CORE_KEYWORDS,
+    services.flatMap((s) => [s.name, `${s.name} near me`]),
+    ["home services Nepal", "home improvement Bhaktapur"]
+  ),
+  alternates: { canonical: "/services" },
+  openGraph: {
+    title: "Home Services in Bhaktapur & Kathmandu Valley | Maa Kali Hardware",
+    description:
+      "Plumber, electrician and construction company services — room addition, house repairing, full construction, renovation and more across Bhaktapur & the Kathmandu Valley.",
+    url: "/services",
+  },
 };
 
 export default function ServicesPage() {

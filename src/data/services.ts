@@ -15,9 +15,67 @@ export interface Service {
   process: ServiceProcessStep[];
   num: string;
   items: string[];
+  keywords: string[];
 }
 
-const rawServices: (Omit<Service, "num" | "items" | "process"> & {
+// Extra high-intent keyword targets layered onto specific services, on top of
+// the name/location variants generated for every service below.
+const PRIORITY_KEYWORDS: Record<string, string[]> = {
+  "plumbing-solutions": [
+    "plumber",
+    "plumber near me",
+    "plumber in Bhaktapur",
+    "plumber in Kathmandu",
+    "plumbing service near me",
+  ],
+  "electrical-work": [
+    "electrician",
+    "electrician near me",
+    "electrician in Bhaktapur",
+    "electrician in Kathmandu",
+    "electrical contractor Nepal",
+  ],
+  repairing: [
+    "house repairing",
+    "repairing items",
+    "repairing",
+    "home repair near me",
+    "handyman near me Bhaktapur",
+  ],
+  "room-addition": [
+    "room addition",
+    "house addition",
+    "room addition near me",
+    "extra floor addition Nepal",
+  ],
+  "full-house-construction": [
+    "construction company",
+    "construction company near me",
+    "house construction company Nepal",
+    "turnkey construction Bhaktapur",
+  ],
+  "personal-home-construction": [
+    "construction company",
+    "construction company near me",
+    "home builder Nepal",
+    "custom home construction Bhaktapur",
+  ],
+  "commercial-building-construction": [
+    "construction company",
+    "construction company near me",
+    "commercial construction Nepal",
+    "building contractor Kathmandu Valley",
+  ],
+  renovation: ["house renovation Nepal", "home renovation near me", "repairing"],
+  waterproofing: ["waterproofing service near me", "roof waterproofing Nepal"],
+  "marble-tile-works": ["tile work near me", "marble flooring Nepal"],
+  "professional-painting": ["house painting near me", "painting contractor Bhaktapur"],
+  "false-ceiling": ["false ceiling near me", "false ceiling contractor Nepal"],
+  "modular-kitchen": ["modular kitchen near me", "modular kitchen Bhaktapur"],
+  "interior-designing": ["interior designer near me", "interior design Kathmandu Valley"],
+};
+
+const rawServices: (Omit<Service, "num" | "items" | "process" | "keywords"> & {
   process: { t: string; d: string }[];
 })[] = [
   {
@@ -533,6 +591,19 @@ export const services: Service[] = rawServices.map((s, i) => ({
   num: String(i + 1).padStart(2, "0"),
   items: s.scope.slice(0, 3),
   process: s.process.map((p, j) => ({ ...p, step: String(j + 1).padStart(2, "0") })),
+  keywords: Array.from(
+    new Set([
+      s.name,
+      `${s.name} in Bhaktapur`,
+      `${s.name} in Kathmandu`,
+      `${s.name} in Kathmandu Valley`,
+      `${s.name} near me`,
+      `${s.name} service in Nepal`,
+      `best ${s.name} in Nepal`,
+      "hardware store Bhaktapur",
+      ...(PRIORITY_KEYWORDS[s.id] ?? []),
+    ])
+  ),
 }));
 
 export function getService(id: string): Service | undefined {

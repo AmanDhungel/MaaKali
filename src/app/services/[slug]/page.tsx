@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { services, getService } from "@/data/services";
 import Reveal from "@/components/Reveal";
+import { buildKeywords, SITE_URL } from "@/lib/seo";
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.id }));
@@ -16,9 +17,18 @@ export async function generateMetadata({
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return { title: "Service | Maa Kali Hardware" };
+  const title = `${service.name} in Bhaktapur & Kathmandu Valley`;
+  const description = `${service.desc} Serving Bhaktapur, Kathmandu and the whole Kathmandu Valley — request ${service.name.toLowerCase()} from Maa Kali Hardware's own skilled teams.`;
   return {
-    title: `${service.name} | Maa Kali Hardware`,
-    description: service.desc,
+    title,
+    description,
+    keywords: buildKeywords(service.keywords),
+    alternates: { canonical: `/services/${service.id}` },
+    openGraph: {
+      title: `${title} | Maa Kali Hardware`,
+      description,
+      url: `/services/${service.id}`,
+    },
   };
 }
 
@@ -33,8 +43,42 @@ export default async function ServiceDetailPage({
 
   const otherServices = services.filter((s) => s.id !== service.id).slice(0, 6);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.name,
+    description: service.desc,
+    provider: {
+      "@type": "HardwareStore",
+      name: "Maa Kali Hardware",
+      url: SITE_URL,
+    },
+    areaServed: ["Bhaktapur", "Kathmandu", "Kathmandu Valley", "Nepal"],
+    url: `${SITE_URL}/services/${service.id}`,
+  };
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${SITE_URL}/services` },
+      { "@type": "ListItem", position: 3, name: service.name, item: `${SITE_URL}/services/${service.id}` },
+    ],
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
       {/* HERO */}
       <section className="relative bg-ink text-white overflow-hidden px-[6vw] pt-[74px] pb-20">
         <div
