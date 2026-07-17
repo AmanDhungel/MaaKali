@@ -1,23 +1,22 @@
 "use client";
 import axios from "axios";
-import { CldUploadButton } from "next-cloudinary";
-import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AddProductData, GETProducts } from "@/services/product.services";
+import { AddProductData } from "@/services/product.services";
 import ProductForm from "./ProductForm";
 import { ProductFormProps, ProductFormType } from "@/types/product.types";
+import AdminPageHeader from "@/components/admin/AdminPageHeader";
 
 const AddProduct = () => {
   const form = useForm({
     resolver: zodResolver(ProductFormType),
   });
 
-  const { mutate } = AddProductData();
+  const { mutate, isPending } = AddProductData();
 
   const onSubmit = async (data: ProductFormProps) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mutate(data as any, {
       onSuccess: () => {
         toast.success("Product added successfully!");
@@ -33,22 +32,26 @@ const AddProduct = () => {
     });
   };
 
-  console.log(form.getValues());
-
   return (
-    <FormProvider {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 mt-10 border-2 border-gray-300 p-4 py-20 rounded-md shadow-md bg-white w-full max-w-3xl m-auto"
-        encType="multipart/form-data">
-        <ProductForm />
-        <button
-          type="submit"
-          className="flex cursor-pointer justify-center w-3/4 m-auto mt-4 bg-blue-500 text-white p-2 rounded-md">
-          Submit
-        </button>
-      </form>
-    </FormProvider>
+    <div>
+      <AdminPageHeader eyebrow="INVENTORY" title="Add Product" />
+      <FormProvider {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="max-w-[1400px] mx-auto bg-white border border-border-light p-8 md:p-10"
+          encType="multipart/form-data"
+        >
+          <ProductForm />
+          <button
+            type="submit"
+            disabled={isPending}
+            className="mt-8 w-full md:w-auto bg-forest hover:bg-mint hover:text-ink disabled:opacity-60 text-white font-extrabold px-10 py-3.5 transition-colors"
+          >
+            {isPending ? "Saving…" : "Save Product"}
+          </button>
+        </form>
+      </FormProvider>
+    </div>
   );
 };
 

@@ -2,31 +2,35 @@
 
 import { TableDemo } from "@/components/ui/dynamicTable";
 import { GETBlogs } from "@/services/blog.services";
-import { Loader } from "lucide-react";
-import Link from "next/link";
+import { Loader2 } from "lucide-react";
+import { Plus } from "react-feather";
+import AdminPageHeader from "@/components/admin/AdminPageHeader";
 
 const BlogPostForm = () => {
   const { data, isLoading } = GETBlogs();
   return (
-    <>
-      <Link
-        href="/admin/addblog"
-        className="w-fit flex bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-5 mr-5 ml-auto">
-        Add Blog
-      </Link>
-      <div className="w-11/12 m-auto">
+    <div>
+      <AdminPageHeader
+        eyebrow="CONTENT"
+        title="Blog Posts"
+        action={{ label: "Add Blog", href: "/admin/addblog", icon: <Plus className="h-4 w-4" /> }}
+      />
+      <div className="max-w-[1400px] mx-auto">
         {isLoading ? (
-          <Loader className="animate-spin flex m-auto w-12 h-12" />
+          <div className="flex justify-center py-24">
+            <Loader2 className="animate-spin text-forest h-8 w-8" />
+          </div>
         ) : (
           <TableDemo
             title="Blogs"
-            header={["title", "description", "tags", "relatedPosts", "image"]}
+            header={["image", "title", "author", "tags"]}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data={data as any}
             action={true}
           />
         )}
       </div>
-    </>
+    </div>
   );
 };
 

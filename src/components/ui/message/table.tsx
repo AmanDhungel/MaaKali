@@ -2,23 +2,15 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { KEY } from "@/lib/Keys";
-import { DeleteBlog } from "@/services/blog.services";
-import { DeleteProduct } from "@/services/product.services";
 import { useQueryClient } from "@tanstack/react-query";
-import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-
-import { Frown, Meh, Smile } from "react-feather";
-import Link from "next/link";
+import { Smile } from "react-feather";
 import { useBlogStore } from "@/store/blog.store";
 import BlogDialog from "@/components/admin/blog/BlogDialog";
 import { DeleteContact, UpdateStatus } from "@/services/contact.services";
@@ -27,11 +19,12 @@ import { Checkbox } from "../checkbox";
 type TableDemoProps = {
   header: string[];
   title: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
   footer?: string;
 };
 
-export function MessageTable({ header, data, footer }: TableDemoProps) {
+export function MessageTable({ header, data }: TableDemoProps) {
   const queryClient = useQueryClient();
 
   const { mutate: deleteMessage } = DeleteContact();
@@ -52,23 +45,17 @@ export function MessageTable({ header, data, footer }: TableDemoProps) {
     });
   };
 
-  const handleStatusChange = ({
-    id,
-    checked,
-  }: {
-    id: string;
-    checked: string;
-  }) => {
+  const handleStatusChange = ({ id, checked }: { id: string; checked: string }) => {
     UpdateMessageStatus(
       { id, checked },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: [KEY.Contact] });
-          toast.success("Status Updated successfully");
+          toast.success("Status updated successfully");
           dailogClose();
         },
         onError: () => {
-          toast.error("Error updating Status");
+          toast.error("Error updating status");
         },
       }
     );
@@ -76,76 +63,75 @@ export function MessageTable({ header, data, footer }: TableDemoProps) {
 
   if (data?.length === 0) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen space-y-2">
-        <Smile className=" text-amber-500 w-32 h-32" />
-        <h1 className="text-2xl font-bold">No Messages Right Now</h1>
+      <div className="flex flex-col justify-center items-center py-24 gap-3 bg-white border border-border-light">
+        <Smile className="text-forest w-16 h-16" />
+        <h1 className="text-xl font-extrabold text-ink">No Messages Right Now</h1>
       </div>
     );
   }
 
   return (
-    <Table className="scrollbar-hide">
-      <TableHeader>
-        <TableRow>
-          {header.map((item, index) => (
-            <TableHead key={index}>{item}</TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data?.map((row, rowIndex) => {
-          if (row.length === 0) {
-            return (
-              <TableCaption key={rowIndex} className="text-left">
-                No Data Found
-              </TableCaption>
-            );
-          }
-          return (
-            <TableRow key={rowIndex} className=" ">
-              {header.map((col, colIndex) => {
-                return (
-                  <TableCell
-                    className={`${
-                      row.checked === "true" ? "line-through" : ""
-                    } scrollbar-hidden md:max-w-[2rem]   overflow-scroll scroll-smooth `}
-                    key={colIndex}>
-                    {row[col] ?? ""}
-                  </TableCell>
-                );
-              })}
-              <TableCell className="text-right md:max-w-[5rem]">
-                <div className="flex gap-2">
-                  <Checkbox
-                    className="mx-3 my-auto"
-                    checked={row.checked === "true" ? true : false}
-                    onClick={() =>
-                      handleStatusChange({
-                        id: row._id,
-                        checked: row.checked === "true" ? "false" : "true",
-                      })
-                    }
-                  />
-                  <BlogDialog
-                    title="Delete Message"
-                    btnText="Delete"
-                    description="Are you sure you want to delete this Message?"
-                    onClickEvent={() => handleMessageDelete(row._id)}
-                    submitText="Delete"
-                  />
-                </div>
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-      {footer && footer.length > 0 && (
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={header.length}>{footer}</TableCell>
+    <div className="bg-white border border-border-light overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow className="border-b border-border-light hover:bg-transparent">
+            {header.map((item, index) => (
+              <TableHead
+                key={index}
+                className="font-accent text-[11px] tracking-[.1em] text-ink/60 uppercase h-12 px-4"
+              >
+                {item}
+              </TableHead>
+            ))}
+            <TableHead className="font-accent text-[11px] tracking-[.1em] text-ink/60 uppercase h-12 px-4 text-right">
+              Read / Actions
+            </TableHead>
           </TableRow>
-        </TableFooter>
-      )}
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {data?.map((row, rowIndex) => {
+            return (
+              <TableRow
+                key={rowIndex}
+                className="border-b border-border-light last:border-0 hover:bg-offwhite transition-colors"
+              >
+                {header.map((col, colIndex) => {
+                  return (
+                    <TableCell
+                      className={`px-4 py-3 max-w-[240px] overflow-hidden text-ellipsis text-[13.5px] ${
+                        row.checked === "true" ? "line-through text-body-muted" : "text-ink"
+                      }`}
+                      key={colIndex}
+                    >
+                      {row[col] ?? ""}
+                    </TableCell>
+                  );
+                })}
+                <TableCell className="px-4 py-3 text-right">
+                  <div className="flex gap-3 justify-end items-center">
+                    <Checkbox
+                      checked={row.checked === "true"}
+                      onClick={() =>
+                        handleStatusChange({
+                          id: row._id,
+                          checked: row.checked === "true" ? "false" : "true",
+                        })
+                      }
+                    />
+                    <BlogDialog
+                      title="Delete Message"
+                      btnText="Delete"
+                      description="Are you sure you want to delete this message?"
+                      onClickEvent={() => handleMessageDelete(row._id)}
+                      submitText="Delete"
+                    />
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

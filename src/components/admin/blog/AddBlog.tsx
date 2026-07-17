@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import axios from "axios";
 import { BlogFormType, BlogPostFormProps } from "@/types/blog.types";
+import AdminPageHeader from "@/components/admin/AdminPageHeader";
 
 const AddBlog = () => {
   const { mutate, isPending } = AddBlogPost();
@@ -30,17 +31,20 @@ const AddBlog = () => {
     });
   };
   return (
-    <div className="overflow-y-auto min-h-max">
+    <div>
+      <AdminPageHeader eyebrow="CONTENT" title="Add Blog Post" />
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6 w-11/12 m-auto p-4 border-2 rounded-md mt-10 overflow-scroll mb-10 overflow-y-auto max-h-screen">
+          className="max-w-[1400px] mx-auto bg-white border border-border-light p-8 md:p-10 mb-10"
+        >
           <BlogForm />
           <button
             disabled={isPending}
             type="submit"
-            className="flex cursor-pointer justify-center w-3/4 m-auto mt-4 bg-blue-500 text-white p-2 rounded-md mb-20">
-            Submit Blog Post
+            className="mt-8 w-full md:w-auto bg-forest hover:bg-mint hover:text-ink disabled:opacity-60 text-white font-extrabold px-10 py-3.5 transition-colors"
+          >
+            {isPending ? "Publishing…" : "Publish Blog Post"}
           </button>
         </form>
       </FormProvider>

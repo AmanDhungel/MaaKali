@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { useBlogStore } from "@/store/blog.store";
 
 const BlogDialog = ({
@@ -34,23 +33,28 @@ const BlogDialog = ({
         onClick={() => {
           dailogOpen();
         }}
-        className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer">
+        className="border border-red-200 text-red-600 hover:bg-red-500 hover:text-white hover:border-red-500 text-xs font-bold px-3 py-2 transition-colors cursor-pointer"
+      >
         {btnText}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="rounded-none border-border-light">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+          <DialogTitle className="font-black text-ink">{title}</DialogTitle>
+          <DialogDescription className="text-body-muted">{description}</DialogDescription>
           <DialogFooter>
-            <DialogClose onClick={dailogClose}>
-              <Button variant={"outline"}> Cancel</Button>
+            <DialogClose
+              onClick={dailogClose}
+              className="border border-border-light hover:border-ink px-4 py-2 text-sm font-semibold transition-colors"
+            >
+              Cancel
             </DialogClose>
-            <Button
+            <button
               type="submit"
               onClick={onClickEvent}
-              className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer">
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 text-sm font-semibold transition-colors cursor-pointer"
+            >
               {submitText}
-            </Button>
+            </button>
           </DialogFooter>
         </DialogHeader>
       </DialogContent>

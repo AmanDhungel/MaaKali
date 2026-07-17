@@ -2,48 +2,50 @@
 import { TableDemo } from "@/components/ui/dynamicTable";
 import { GETProducts } from "@/services/product.services";
 import { Loader2 } from "lucide-react";
-import Link from "next/link";
-import React from "react";
+import { Plus } from "react-feather";
+import AdminPageHeader from "@/components/admin/AdminPageHeader";
 
 const Product = () => {
   const { data, isLoading } = GETProducts();
 
   const tableData = data?.map((product) => ({
     ...product,
-    inStock: product.inStock ? "Yes" : "No",
-    isProductNew: product.isProductNew ? "Yes" : "No",
+    inStock: product.inStock === "true" ? "Yes" : "No",
+    isProductNew: product.isProductNew?.toLowerCase() === "true" ? "Yes" : "No",
   }));
 
   return (
     <div>
-      <Link
-        href="/admin/addproduct"
-        className="w-fit flex bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-5 mr-5 ml-auto">
-        Add Product
-      </Link>
-      {isLoading ? (
-        <Loader2 className="animate-spin flex w-12 h-12 m-auto" />
-      ) : (
-        <TableDemo
-          title="Products"
-          header={[
-            "image",
-            "name",
-            "category",
-            "brand",
-            "price",
-            "originalPrice",
-            "rating",
-            "inStock",
-            "isProductNew",
-            "features",
-            "description",
-            "specifications",
-          ]}
-          data={tableData as any}
-          action={true}
-        />
-      )}
+      <AdminPageHeader
+        eyebrow="INVENTORY"
+        title="Products"
+        action={{ label: "Add Product", href: "/admin/addproduct", icon: <Plus className="h-4 w-4" /> }}
+      />
+      <div className="max-w-[1400px] mx-auto">
+        {isLoading ? (
+          <div className="flex justify-center py-24">
+            <Loader2 className="animate-spin text-forest h-8 w-8" />
+          </div>
+        ) : (
+          <TableDemo
+            title="Products"
+            header={[
+              "image",
+              "name",
+              "category",
+              "brand",
+              "price",
+              "originalPrice",
+              "rating",
+              "inStock",
+              "isProductNew",
+            ]}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            data={tableData as any}
+            action={true}
+          />
+        )}
+      </div>
     </div>
   );
 };

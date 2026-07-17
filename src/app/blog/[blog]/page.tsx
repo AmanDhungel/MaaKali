@@ -7,7 +7,6 @@ import {
   Calendar,
   User,
   ArrowLeft,
-  Share2,
   Loader,
   Facebook,
   Twitter,
@@ -19,86 +18,101 @@ const SingleBlogPage = () => {
   const { data, isLoading } = GETSingleBlog(param?.blog as string);
 
   if (isLoading) {
-    return <Loader className="flex w-12 h-12 m-auto mt-12 animate-spin" />;
+    return (
+      <div className="bg-offwhite min-h-screen flex items-center justify-center">
+        <Loader className="h-8 w-8 animate-spin text-forest" />
+      </div>
+    );
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen mb-20">
-      <div className="pt-6 pb-2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <a
-          href="/blog"
-          className="inline-flex items-center text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors">
-          <ArrowLeft className="h-5 w-5 mr-1" />
-          Back to Blog
-        </a>
+    <div className="bg-offwhite min-h-screen">
+      <div className="border-b border-border-light px-[6vw] py-4">
+        <div className="max-w-[820px] mx-auto">
+          <Link
+            href="/blog"
+            className="inline-flex items-center text-forest hover:text-mint font-semibold text-sm transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 mr-1.5" />
+            Back to Blog
+          </Link>
+        </div>
       </div>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <header className="mb-8">
-          <span className="inline-block bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-300 text-sm font-semibold px-3 py-1 rounded-full mb-4">
-            Maa Kali Hardware
+      <main className="max-w-[820px] mx-auto px-[6vw] py-14">
+        <header className="mb-9">
+          <span className="inline-block font-accent text-[11px] tracking-[.12em] text-forest border border-forest/40 px-3 py-1.5 mb-5">
+            MAA KALI HARDWARE
           </span>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-[32px] md:text-[44px] font-black tracking-[-.02em] leading-[1.05] mb-5">
             {data?.title}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-4 text-gray-500 dark:text-gray-400 mb-6">
+          <div className="flex flex-wrap items-center gap-5 font-accent text-xs tracking-[.05em] text-body-muted mb-8">
             <span className="flex items-center">
-              <User className="h-4 w-4 mr-2" />
-              {data?.author} •
+              <User className="h-3.5 w-3.5 mr-2" />
+              {data?.author}
             </span>
             <span className="flex items-center">
-              <Calendar className="h-4 w-4 mr-2" />
+              <Calendar className="h-3.5 w-3.5 mr-2" />
               {new Date(data?.createdAt ? data?.createdAt : "").toDateString()}
             </span>
           </div>
 
-          <div className="rounded-xl overflow-hidden shadow-md mb-8 w-fit m-auto">
-            <Image
-              width={500}
-              height={500}
-              src={data?.image ? data?.image : ""}
-              alt={data?.title ? data?.title : ""}
-              className="w-[20vh] h-auto object-cover"
-            />
-          </div>
+          {data?.image && (
+            <div className="border border-border-light overflow-hidden mb-8">
+              <Image
+                width={820}
+                height={460}
+                src={data.image}
+                alt={data.title ?? ""}
+                className="w-full h-auto object-cover"
+              />
+            </div>
+          )}
         </header>
 
-        <article className="prose dark:prose-invert max-w-none">
+        <article className="prose max-w-none prose-headings:font-black prose-a:text-forest">
           <div dangerouslySetInnerHTML={{ __html: data?.description || "" }} />
 
-          <div className="mt-12 flex flex-wrap gap-2">
-            {data?.tags.map((tag) => (
-              <span
-                key={tag}
-                className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm px-3 py-1 rounded-full">
-                #{tag}
-              </span>
-            ))}
-          </div>
+          {!!data?.tags?.length && (
+            <div className="mt-12 flex flex-wrap gap-2 not-prose">
+              {data.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="bg-white border border-border-light text-ink text-sm px-3 py-1.5"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
         </article>
 
-        <div className="flex flex-wrap justify-between items-center mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex space-x-4">
-            <button className="flex items-center text-gray-700 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
-              <Share2 className="h-5 w-5 mr-2" />
-              Share Using Social Media Icons
-            </button>
+        <div className="flex flex-wrap justify-between items-center mt-12 pt-6 border-t border-border-light">
+          <span className="font-accent text-xs tracking-[.1em] text-body-muted">
+            SHARE THIS ARTICLE
+          </span>
+          <div className="flex gap-3">
             <Link
               href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
                 `https://maa-kali.vercel.app${pathname}`
               )}`}
               target="_blank"
-              rel="noopener noreferrer">
-              <Facebook className="h-5 w-5 mr-2" />
+              rel="noopener noreferrer"
+              className="w-9 h-9 flex items-center justify-center border border-border-light hover:border-forest hover:text-forest transition-colors"
+            >
+              <Facebook className="h-4 w-4" />
             </Link>
             <Link
               href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
                 `https://maa-kali.vercel.app${pathname}`
               )}&text=${encodeURIComponent("Check this out!")}`}
               target="_blank"
-              rel="noopener noreferrer">
-              <Twitter className="h-5 w-5 mr-2" />
+              rel="noopener noreferrer"
+              className="w-9 h-9 flex items-center justify-center border border-border-light hover:border-forest hover:text-forest transition-colors"
+            >
+              <Twitter className="h-4 w-4" />
             </Link>
           </div>
         </div>

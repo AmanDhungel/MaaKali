@@ -1,11 +1,12 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
-import { Sun, Moon, Menu, X, ShoppingCart } from "react-feather";
+import { useState, useEffect } from "react";
+import { Menu, X, ShoppingCart } from "react-feather";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import Cookies from "js-cookie";
+import MarqueeBar from "./MarqueeBar";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,37 +19,29 @@ const Navbar = () => {
     },
   ]);
 
+  const isAdmin = pathname?.startsWith("/admin");
+
   useEffect(() => {
-    if (pathname?.startsWith("/admin")) {
+    if (isAdmin) {
       setNavLinks([
         { name: "Product", path: "/admin/product" },
-
-        {
-          name: "Blog",
-          path: "/admin/blog",
-        },
+        { name: "Blog", path: "/admin/blog" },
         { name: "Message", path: "/admin/messages" },
       ]);
     } else {
       setNavLinks([
         { name: "Home", path: "/" },
-        { name: "Product", path: "/product" },
+        { name: "Products", path: "/product" },
+        { name: "Services", path: "/services" },
+        { name: "About", path: pathname === "/" ? "#about" : "/#about" },
         { name: "Blog", path: "/blog" },
-        {
-          name: "About",
-          path: pathname?.startsWith("/admin")
-            ? ""
-            : pathname === "/"
-            ? "#about"
-            : "/#about",
-        },
-        {
-          name: "Services",
-          path: pathname === "/" ? "#services" : "/#services",
-        },
         { name: "Contact", path: pathname === "/" ? "#contact" : "/#contact" },
       ]);
     }
+  }, [pathname, isAdmin]);
+
+  useEffect(() => {
+    setIsOpen(false);
   }, [pathname]);
 
   const handleLogout = () => {
@@ -58,87 +51,98 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`bg-white dark:bg-gray-900 shadow-md `}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <div className="group w-[70px] h-[70px] perspective">
-              <div className="relative w-full h-full transition-transform duration-700 transform-style-preserve-3d group-hover:rotate-y-180">
-                <div className="absolute w-full h-full backface-hidden flex items-center justify-center">
-                  <Image
-                    src="/dh.png"
-                    alt="Logo"
-                    width={70}
-                    height={70}
-                    className="h-12 w-12 object-center"
-                  />
-                </div>
+    <div className="sticky top-0 z-[60]">
+      <MarqueeBar />
+      <nav className="bg-ink/85 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-[1320px] mx-auto px-[6vw] h-[74px] flex items-center justify-between gap-6">
+          <Link href="/" className="flex items-center gap-3">
+            <span className="w-[34px] h-[34px] bg-mint flex items-center justify-center text-ink font-black text-lg [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">
+              M
+            </span>
+            <span className="flex flex-col leading-[1.04]">
+              <span className="text-white font-extrabold text-[17px] tracking-[.01em]">
+                MAA KALI
+              </span>
+              <span className="text-white/50 font-accent text-[9.5px] tracking-[.22em]">
+                HARDWARE · HOME
+              </span>
+            </span>
+          </Link>
 
-                <div className="absolute w-full h-full backface-hidden rotate-y-180 flex items-center justify-center bg-white dark:bg-gray-800 rounded">
-                  <span className="text-sm font-bold text-gray-900 dark:text-white text-center">
-                    National Home Decor
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="hidden md:flex items-center space-x-4">
+          <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.path}
-                className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
+                className="cursor-pointer font-semibold text-[14.5px] text-white/78 hover:text-mint transition-colors"
+              >
                 {link.name}
               </Link>
             ))}
-            {pathname?.startsWith("/admin") ? (
-              <Button
-                onClick={handleLogout}
-                variant={"outline"}
-                className="text-red-500">
-                {" "}
+            {isAdmin ? (
+              <Button onClick={handleLogout} variant="outline" className="rounded-none text-red-400 border-white/20">
                 Logout
               </Button>
             ) : (
-              <Link
-                className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-full transition-colors"
-                href="/cart">
-                <ShoppingCart className="h-5 w-5" />
-              </Link>
+              <>
+                <Link
+                  href="/#contact"
+                  className="cursor-pointer bg-forest hover:bg-mint hover:text-ink text-white font-bold text-sm px-5 py-[11px] transition-colors"
+                >
+                  Get a Quote →
+                </Link>
+                <Link
+                  href="/cart"
+                  className="flex items-center justify-center w-10 h-10 bg-white/10 hover:bg-mint hover:text-ink text-white transition-colors"
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                </Link>
+              </>
             )}
-          </div>
+          </nav>
 
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none"
-              aria-expanded="false">
-              <span className="sr-only">Open main menu</span>
-              {isOpen ? (
-                <X className="block h-6 w-6" />
-              ) : (
-                <Menu className="block h-6 w-6" />
-              )}
-            </button>
-          </div>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden flex items-center justify-center border border-white/20 text-white p-2"
+            aria-expanded={isOpen}
+          >
+            <span className="sr-only">Open main menu</span>
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
-      </div>
+      </nav>
 
-      <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white dark:bg-gray-900">
+      {isOpen && (
+        <div className="md:hidden fixed inset-x-0 top-[calc(74px+34px)] bottom-0 z-[55] bg-ink/98 backdrop-blur-md px-[8vw] py-8 flex flex-col gap-1 overflow-y-auto">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.path}
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800 transition-colors"
-              onClick={() => setIsOpen(false)}>
+              onClick={() => setIsOpen(false)}
+              className="text-white text-2xl font-extrabold py-3.5 border-b border-white/10"
+            >
               {link.name}
             </a>
           ))}
+          {isAdmin ? (
+            <button
+              onClick={handleLogout}
+              className="text-left text-red-400 text-2xl font-extrabold py-3.5"
+            >
+              Logout
+            </button>
+          ) : (
+            <a
+              href="/cart"
+              onClick={() => setIsOpen(false)}
+              className="text-mint text-2xl font-extrabold py-3.5"
+            >
+              Cart →
+            </a>
+          )}
         </div>
-      </div>
-    </nav>
+      )}
+    </div>
   );
 };
 

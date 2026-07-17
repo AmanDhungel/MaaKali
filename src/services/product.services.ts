@@ -1,4 +1,4 @@
-import { DELETE, GET, POST } from "@/helper/fetcher";
+import { DELETE, GET, PATCH, POST } from "@/helper/fetcher";
 import { KEY } from "@/lib/Keys";
 import { ApiResponseType } from "@/types/ApiResponseType";
 import { ProductFormProps } from "@/types/product.types";
@@ -18,12 +18,35 @@ export const GETProducts = () => {
   });
 };
 
+export const GETSingleProduct = (id: string) => {
+  return useQuery<
+    ApiResponseType<ProductFormProps>,
+    AxiosError<{ message: string; error: Record<string, unknown> }>,
+    ProductFormProps
+  >({
+    queryKey: [KEY.Product, id],
+    queryFn: () => {
+      return GET(`product/${id}`);
+    },
+    enabled: !!id,
+  });
+};
+
 export const AddProductData = () => {
   return useMutation({
     mutationKey: [KEY.Product],
     mutationFn: (data) => {
       console.log(data);
       return POST(`product`, data);
+    },
+  });
+};
+
+export const UpdateProduct = (id: string) => {
+  return useMutation({
+    mutationKey: [KEY.Product],
+    mutationFn: (data: ProductFormProps) => {
+      return PATCH(`product/${id}`, data);
     },
   });
 };
