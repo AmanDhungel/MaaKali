@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GETProducts } from "@/services/product.services";
 import { Loader2 } from "lucide-react";
 import { ShoppingCart, Star } from "react-feather";
@@ -92,6 +92,12 @@ const ProductCard = ({ product, index = 0 }: { product: ProductFormProps; index?
 const ProductShowcase = () => {
   const { data, isLoading } = GETProducts();
   const [activeCat, setActiveCat] = useState("All");
+
+  // Lets service pages deep-link into a pre-filtered category, e.g. /product?category=Plumbing
+  useEffect(() => {
+    const category = new URLSearchParams(window.location.search).get("category");
+    if (category) setActiveCat(category);
+  }, []);
 
   const cats = useMemo(() => {
     if (!data) return ["All"];

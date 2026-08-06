@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { services } from "@/data/services";
 import Reveal from "@/components/Reveal";
-import { buildKeywords, CORE_KEYWORDS } from "@/lib/seo";
+import { buildKeywords, CORE_KEYWORDS, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Home Services in Bhaktapur & Kathmandu Valley",
@@ -22,9 +22,23 @@ export const metadata: Metadata = {
   },
 };
 
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+    { "@type": "ListItem", position: 2, name: "Services", item: `${SITE_URL}/services` },
+  ],
+};
+
 export default function ServicesPage() {
   return (
     <div>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
       <section className="relative bg-ink text-white overflow-hidden px-[6vw] pt-20 pb-[70px]">
         <div
           className="absolute -top-[30%] -left-[10%] w-[50vw] h-[50vw] rounded-full blur-[70px] opacity-80"

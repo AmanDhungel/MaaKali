@@ -78,6 +78,18 @@ export default async function SingleBlogPage({
       }
     : null;
 
+  const breadcrumbLd = blog
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+          { "@type": "ListItem", position: 3, name: blog.title, item: `${SITE_URL}/blog/${id}` },
+        ],
+      }
+    : null;
+
   return (
     <>
       {jsonLd && (
@@ -85,6 +97,13 @@ export default async function SingleBlogPage({
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+      {breadcrumbLd && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
         />
       )}
       <BlogDetailClient />

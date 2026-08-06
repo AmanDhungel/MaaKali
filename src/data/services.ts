@@ -657,3 +657,19 @@ export const contactCards = [
   { icon: "✉️", title: "Email Us", body: "hello@maakalihardware.com.np" },
   { icon: "🕖", title: "Opening Hours", body: "Sun–Fri: 7:00 AM – 7:00 PM\nSat: 7:00 AM – 3:00 PM" },
 ];
+
+// Maps a service to the real product category (as stored on Product docs) it
+// most directly supplies, so the service page can link straight into a
+// pre-filtered product listing. Left out entirely where no product category
+// is a genuine match (e.g. site surveys, soil testing, room addition) rather
+// than force a misleading link.
+export const SERVICE_TO_PRODUCT_CATEGORY: Record<string, string> = {
+  "plumbing-solutions": "Plumbing",
+  "professional-painting": "Painting",
+  "marble-tile-works": "tiles & marbles",
+  "false-ceiling": "False Ceiling",
+  "electrical-work": "Electrical",
+  carpentry: "Carpentry",
+  "modular-kitchen": "Carpentry",
+  "interior-designing": "interior Design",
+};

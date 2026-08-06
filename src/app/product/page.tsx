@@ -1,6 +1,6 @@
 import ProductShowcase from "@/components/Product";
 import { Metadata } from "next";
-import { buildKeywords, CORE_KEYWORDS } from "@/lib/seo";
+import { buildKeywords, CORE_KEYWORDS, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Shop Hardware, Plumbing, Electrical & Paint Products",
@@ -22,4 +22,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default ProductShowcase;
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+    { "@type": "ListItem", position: 2, name: "Products", item: `${SITE_URL}/product` },
+  ],
+};
+
+export default function ProductPage() {
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      <ProductShowcase />
+    </>
+  );
+}

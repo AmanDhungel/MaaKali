@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { services, getService } from "@/data/services";
+import { services, getService, SERVICE_TO_PRODUCT_CATEGORY } from "@/data/services";
 import Reveal from "@/components/Reveal";
 import { buildKeywords, SITE_URL } from "@/lib/seo";
 
@@ -42,6 +42,7 @@ export default async function ServiceDetailPage({
   if (!service) notFound();
 
   const otherServices = services.filter((s) => s.id !== service.id).slice(0, 6);
+  const productCategory = SERVICE_TO_PRODUCT_CATEGORY[service.id];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -127,6 +128,14 @@ export default async function ServiceDetailPage({
             >
               ← All services
             </Link>
+            {productCategory && (
+              <Link
+                href={`/product?category=${encodeURIComponent(productCategory)}`}
+                className="border border-white/28 hover:border-mint text-white font-bold text-[15px] px-7 py-[15px] transition-colors"
+              >
+                Shop {productCategory} products →
+              </Link>
+            )}
           </div>
         </div>
       </section>

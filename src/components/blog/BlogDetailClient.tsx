@@ -90,7 +90,22 @@ const BlogDetailClient = () => {
           )}
         </article>
 
-        <div className="flex flex-wrap justify-between items-center mt-12 pt-6 border-t border-border-light">
+        <div className="mt-10 pt-8 border-t border-border-light flex flex-wrap gap-4">
+          <Link
+            href="/product"
+            className="text-forest hover:text-mint font-semibold text-sm underline underline-offset-2"
+          >
+            Shop genuine hardware, plumbing & electrical products →
+          </Link>
+          <Link
+            href="/services"
+            className="text-forest hover:text-mint font-semibold text-sm underline underline-offset-2"
+          >
+            Explore our home construction & repair services →
+          </Link>
+        </div>
+
+        <div className="flex flex-wrap justify-between items-center mt-8 pt-6 border-t border-border-light">
           <span className="font-accent text-xs tracking-[.1em] text-body-muted">
             SHARE THIS ARTICLE
           </span>

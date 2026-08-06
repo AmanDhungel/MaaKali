@@ -22,10 +22,7 @@ export const BUSINESS = {
     "https://www.instagram.com/nationalhomedecor637/",
     "https://www.youtube.com/@MaaXNational",
   ],
-  openingHours: [
-    "Su-Fr 07:00-19:00",
-    "Sa 07:00-15:00",
-  ],
+  openingHours: ["Su-Fr 07:00-19:00", "Sa 07:00-15:00"],
 };
 
 // Core keyword targets requested for the whole site.
