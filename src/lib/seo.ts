@@ -25,7 +25,6 @@ export const BUSINESS = {
   openingHours: ["Su-Fr 07:00-19:00", "Sa 07:00-15:00"],
 };
 
-// Core keyword targets requested for the whole site.
 export const CORE_KEYWORDS = [
   "hardware store",
   "hardware shop",

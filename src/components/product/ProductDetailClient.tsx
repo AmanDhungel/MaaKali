@@ -8,10 +8,33 @@ import { toast } from "react-toastify";
 import { GETSingleProduct, GETProducts } from "@/services/product.services";
 import Link from "next/link";
 
-const ProductDetailClient = () => {
+// Shape mirrors RawProduct in app/product/[product]/page.tsx (plus fields
+// that the client uses but the server type omits)
+interface InitialProduct {
+  _id: string;
+  name: string;
+  category: string;
+  brand: string;
+  price: number | string;
+  image: string;
+  description?: string;
+  inStock?: string;
+  originalPrice?: number | string;
+  rating?: number | string;
+  features?: string | string[];
+  specifications?: string;
+}
+
+interface Props {
+  /** Pre-fetched from the server component — used immediately so the first
+   *  HTML response contains real content (critical for Google indexing). */
+  initialProduct?: InitialProduct | null;
+}
+
+const ProductDetailClient = ({ initialProduct }: Props) => {
   const params = useParams<{ product: string }>();
   const productId = params?.product ?? "";
-  const { data: product, isLoading } = GETSingleProduct(productId);
+  const { data: fetchedProduct, isLoading } = GETSingleProduct(productId);
   const { data: allProducts } = GETProducts();
   const addToCart = useProductStore((state) => state.addToCart);
 
@@ -20,7 +43,11 @@ const ProductDetailClient = () => {
     "description"
   );
 
-  if (isLoading) {
+  // Use server-provided data immediately; switch to fresh API data once ready
+  const product = fetchedProduct ?? initialProduct;
+
+  // Only show spinner when there is no initial data to display
+  if (isLoading && !product) {
     return (
       <div className="bg-offwhite min-h-screen flex items-center justify-center">
         <Loader2 className="animate-spin text-forest h-8 w-8" />

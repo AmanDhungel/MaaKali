@@ -4,6 +4,10 @@ import Blog from "@/models/Blog";
 import BlogDetailClient from "@/components/blog/BlogDetailClient";
 import { buildKeywords, CORE_KEYWORDS, SITE_URL } from "@/lib/seo";
 
+// Cache the server-rendered page for 1 hour (ISR) so Google always gets
+// real HTML content without hammering the DB on every crawl request.
+export const revalidate = 3600;
+
 interface RawBlog {
   _id: string;
   title: string;
@@ -106,7 +110,10 @@ export default async function SingleBlogPage({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
         />
       )}
-      <BlogDetailClient />
+      {/* Pass server-fetched blog as initial data so the first HTML response
+          contains the full article content — critical for Google indexing.
+          The client component will still refresh data via its own API call. */}
+      <BlogDetailClient initialBlog={blog} />
     </>
   );
 }

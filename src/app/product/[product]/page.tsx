@@ -4,6 +4,10 @@ import Product from "@/models/Product";
 import ProductDetailClient from "@/components/product/ProductDetailClient";
 import { buildKeywords, CORE_KEYWORDS, SITE_URL } from "@/lib/seo";
 
+// Cache the server-rendered page for 1 hour (ISR) so Google always gets
+// real HTML content without hammering the DB on every crawl request.
+export const revalidate = 3600;
+
 interface RawProduct {
   _id: string;
   name: string;
@@ -97,7 +101,10 @@ export default async function SingleProductPage({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       )}
-      <ProductDetailClient />
+      {/* Pass server-fetched product as initial data so the first HTML response
+          contains the full product content — critical for Google indexing.
+          The client component will still refresh data via its own API call. */}
+      <ProductDetailClient initialProduct={product} />
     </>
   );
 }

@@ -13,12 +13,34 @@ import {
 } from "react-feather";
 import { SITE_URL } from "@/lib/seo";
 
-const BlogDetailClient = () => {
+// Shape mirrors RawBlog in app/blog/[blog]/page.tsx
+interface InitialBlog {
+  _id: string;
+  title: string;
+  excerpt?: string;
+  description?: string;
+  author: string;
+  tags: string[];
+  image: string;
+  createdAt?: string;
+}
+
+interface Props {
+  /** Pre-fetched from the server component — used immediately so the first
+   *  HTML response contains real content (critical for Google indexing). */
+  initialBlog?: InitialBlog | null;
+}
+
+const BlogDetailClient = ({ initialBlog }: Props) => {
   const param = useParams();
-  const { data, isLoading } = GETSingleBlog(param?.blog as string);
+  const { data: fetchedBlog, isLoading } = GETSingleBlog(param?.blog as string);
   const shareUrl = `${SITE_URL}/blog/${param?.blog as string}`;
 
-  if (isLoading) {
+  // Use server-provided data immediately; switch to fresh API data once ready
+  const data = fetchedBlog ?? initialBlog;
+
+  // Only show spinner when there is no initial data to display
+  if (isLoading && !data) {
     return (
       <div className="bg-offwhite min-h-screen flex items-center justify-center">
         <Loader className="h-8 w-8 animate-spin text-forest" />
