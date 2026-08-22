@@ -19,6 +19,7 @@ interface InitialProduct {
   image: string;
   description?: string;
   inStock?: string;
+  isProductNew?: string;
   originalPrice?: number | string;
   rating?: number | string;
   features?: string | string[];
@@ -182,7 +183,24 @@ const ProductDetailClient = ({ initialProduct }: Props) => {
 
           <button
             onClick={() => {
-              addToCart(product);
+              addToCart({
+                _id: product._id,
+                image: product.image,
+                name: product.name,
+                category: product.category,
+                brand: product.brand,
+                price: String(product.price),
+                originalPrice:
+                  product.originalPrice != null ? String(product.originalPrice) : undefined,
+                rating: String(product.rating ?? "0"),
+                inStock: product.inStock ?? "true",
+                isProductNew: product.isProductNew ?? "false",
+                features: Array.isArray(product.features)
+                  ? product.features.join(",")
+                  : product.features ?? "",
+                description: product.description ?? "",
+                specifications: product.specifications ?? "",
+              });
               toast.success("Product added to cart!", {
                 position: "bottom-center",
                 autoClose: 1000,
